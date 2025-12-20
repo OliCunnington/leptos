@@ -1,0 +1,10 @@
+cargo install trunk
+
+cargo init leptos-tutorial
+
+#cd into your new leptos-tutorial project and add leptos as a dependency
+
+cargo add leptos --features=csr
+
+#Make sure you've added the wasm32-unknown-unknown target so that Rust can compile your code to WebAssembly to run in the browser.
+rustup target add wasm32-unknown-unknown
