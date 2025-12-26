@@ -15,6 +15,7 @@ use leptos::prelude::*;
 
 #[component]
 fn App() -> impl IntoView {
+    
     let (count, set_count) = signal(0);
     let (_count, _set_count) = signal(0);
     let double_count = move || count.get() * 2;
@@ -44,7 +45,6 @@ fn App() -> impl IntoView {
             // and again here
             {double_count}
         </p>
-
         <button
             on:click=move |_| {
                 *_set_count.write() += 10;
