@@ -1,0 +1,24 @@
+-- dault args for fn
+#[prop(optional)]
+#[prop(default = 100)]
+#[prop(optional)] _ty: PhantomData<T>
+
+
+#[component]
+fn SizeOf<T: Sized>(#[prop(optional)] _ty: PhantomData<T>) -> impl IntoView {
+    std::mem::size_of::<T>()
+}
+
+#[component]
+fn ProgressBar(
+    #[prop(default = 100)]
+    max: u16,
+    progress: ReadSignal<i32>
+) -> impl IntoView {
+    view! {
+        <progress
+            max=max
+            value=progress
+        />
+    }
+}

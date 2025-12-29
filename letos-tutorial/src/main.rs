@@ -68,7 +68,9 @@ fn App() -> impl IntoView {
             "Click me"
         </button>
         // now we use our component!
+        <br/>
         <ProgressBar progress=count/>
+        <br/>
         <ProgressBar max=25 progress=count/>
     }
 }
@@ -82,7 +84,6 @@ fn ProgressBar(
     view! {
         <progress
             max=max
-            // now this works
             value=progress
         />
     }
