@@ -1,9 +1,15 @@
+-- components need functions/signals bound to update dynamically
+
 -- dault args for fn
 #[prop(optional)]
 #[prop(default = 100)]
 #[prop(optional)] _ty: PhantomData<T>
 
+-- Generic props can also be specified using a where clause
+-- or using inline generics like ProgressBar<F: Fn() -> i32 + 'static>
 
+--  all generic types must be used somewhere in the struct
+--  for optional use: PhantomData prop (<Component<T>/> (not with the turbofish-style <Component::<T>/>))
 #[component]
 fn SizeOf<T: Sized>(#[prop(optional)] _ty: PhantomData<T>) -> impl IntoView {
     std::mem::size_of::<T>()
@@ -20,5 +26,25 @@ fn ProgressBar(
             max=max
             value=progress
         />
+    }
+}
+
+
+-- If you’re using nightly Rust with the nightly feature (nightly?!)
+-- signals are functions, so you could use a generic component and take any Fn() -> i32:
+
+#[component]
+fn ProgressBar(
+    #[prop(default = 100)]
+    max: u16,
+    progress: impl Fn() -> i32 + Send + Sync + 'static //?!
+) -> impl IntoView {
+    view! {
+        <progress
+            max=max
+            value=progress
+        />
+        // Add a line-break to avoid overlap
+        <br/>
     }
 }
