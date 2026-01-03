@@ -15,6 +15,17 @@ fn SizeOf<T: Sized>(#[prop(optional)] _ty: PhantomData<T>) -> impl IntoView {
     std::mem::size_of::<T>()
 }
 
+-- usage
+#[component]
+pub fn App() -> impl IntoView {
+    view! {
+        <SizeOf<usize>/>
+        <SizeOf<String>/>
+    }
+}
+-- Note that there are some limitations
+-- For example, macro parser can’t handle nested generics like: <SizeOf<Vec<T>>/>. (? would this not give Vec size??)
+
 #[component]
 fn ProgressBar(
     #[prop(default = 100)]
@@ -47,4 +58,93 @@ fn ProgressBar(
         // Add a line-break to avoid overlap
         <br/>
     }
+}
+
+-- into prop
+-- #[prop(into)]
+
+-- stable rust: signals do not implement Fn() directly, 
+-- move || progress.get() -- wrapping in a closure works, but gets messy
+
+-- #[prop(into)] will automatically call .into() on values passed as props
+-- allows easy passing of props with different values
+
+-- signal
+-- enumerated type that represents any kind of readable reactive signal, or plain value
+
+#[component]
+fn ProgressBar(
+    #[prop(default = 100)]
+    max: u16,
+    #[prop(into)]
+    progress: Signal<i32>
+) -> impl IntoView
+{
+    view! {
+        <progress
+            max=max
+            value=progress
+        />
+        <br/>
+    }
+}
+
+#[component]
+fn App() -> impl IntoView {
+    let (count, set_count) = signal(0);
+    let double_count = move || count.get() * 2;
+
+    view! {
+        <button on:click=move |_| *set_count.write() += 1>
+            "Click me"
+        </button>
+        // .into() converts `ReadSignal` to `Signal`
+        <ProgressBar progress=count/>
+        // use `Signal::derive()` to wrap a derived signal with the `Signal` type
+        <ProgressBar progress=Signal::derive(double_count)/>
+    }
+}
+
+-- Optional Generic Props
+-- you can’t specify optional generic props for a component
+
+-- you can get around this by providing a concrete type using Box<dyn _> or &dyn _
+
+#[component]
+fn ProgressBar(
+    #[prop(optional)] progress: Option<Box<dyn Fn() -> i32 + Send + Sync>>,
+) -> impl IntoView {
+    progress.map(|progress| {
+        view! {
+            <progress
+                max=100
+                value=progress
+            />
+            <br/>
+        }
+    })
+}
+
+#[component]
+pub fn App() -> impl IntoView {
+    view! {
+        <ProgressBar/>
+    }
+}
+-- In this particular case, &dyn Fn() -> i32 will cause lifetime issues
+
+
+-- documenting
+-- /// & /* ... */
+/// Shows progress toward a goal.
+#[component]
+fn ProgressBar(
+    /// The maximum value of the progress bar.
+    #[prop(default = 100)]
+    max: u16,
+    /// How much progress should be displayed.
+    #[prop(into)]
+    progress: Signal<i32>,
+) -> impl IntoView {
+    /* ... */
 }
