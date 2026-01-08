@@ -1,0 +1,243 @@
+--framework does not rerender any of the items in one of the rows, unless the key has changed
+
+-- consider a table, each row is some datastruct
+#[derive(Debug, Clone)]
+struct DatabaseEntry {
+    key: String,
+    value: i32,
+}
+
+-- simple component to iterate over and display each
+#[component]
+pub fn App() -> impl IntoView {
+    // start with a set of three rows
+    let (data, set_data) = signal(vec![
+        DatabaseEntry {
+            key: "foo".to_string(),
+            value: 10,
+        },
+        DatabaseEntry {
+            key: "bar".to_string(),
+            value: 20,
+        },
+        DatabaseEntry {
+            key: "baz".to_string(),
+            value: 15,
+        },
+    ]);
+    view! {
+        // when we click, update each row,
+        // doubling its value
+        <button on:click=move |_| {
+            set_data.update(|data| {
+                for row in data {
+                    row.value *= 2;
+                }
+            });
+            // log the new value of the signal
+            leptos::logging::log!("{:?}", data.get());
+        }>
+            "Update Values"
+        </button>
+        // iterate over the rows and display each value
+        <For
+            each=move || data.get()
+            key=|state| state.key.clone()
+            let(child)
+        >
+            <p>{child.value}</p>
+        </For>
+    }
+}
+
+
+-- <For... let(child)> is equivelent to:
+children=|child| view! { <p>{child.value}</p> }
+-- can also destructure the pattern:
+<For
+    each=move || data.get()
+    key=|state| state.key.clone()
+    let(DatabaseEntry { key, value })
+>
+
+-- When you click the Update Values button, nothing happens
+-- Or rather: the signal is updated, the new value is logged,
+-- but the {child.value} for each row doesn’t update
+
+-- rerender only occurs for key updates, not nested value updates (signals work, see option 2)
+
+-- three (lol... 4) possible solutions:
+
+-- 1 change the key so that it always updates when the data structure changes
+        <For
+            each=move || data.get()
+            key=|state| (state.key.clone(), state.value)
+            let(child)
+        >
+            <p>{child.value}</p>
+        </For>
+-- 2 change the value so that it’s reactive
+--  nested signal
+        #[derive(Debug, Clone)]
+        struct DatabaseEntry {
+            key: String,
+            value: RwSignal<i32>,
+        }
+--  RwSignal<_> is a “read-write signal,” which combines the getter and setter in one object
+        #[component]
+        pub fn App() -> impl IntoView {
+            // start with a set of three rows
+            let (data, _set_data) = signal(vec![
+                DatabaseEntry {
+                    key: "foo".to_string(),
+                    value: RwSignal::new(10),
+                },
+                DatabaseEntry {
+                    key: "bar".to_string(),
+                    value: RwSignal::new(20),
+                },
+                DatabaseEntry {
+                    key: "baz".to_string(),
+                    value: RwSignal::new(15),
+                },
+            ]);
+            view! {
+                // when we click, update each row,
+                // doubling its value
+                <button on:click=move |_| {
+                    for row in &*data.read() {
+                        row.value.update(|value| *value *= 2);
+                    }
+                    // log the new value of the signal
+                    leptos::logging::log!("{:?}", data.get());
+                }>
+                    "Update Values"
+                </button>
+                // iterate over the rows and display each value
+                <For
+                    each=move || data.get()
+                    key=|state| state.key.clone()
+                    let(child)
+                >
+                    <p>{child.value}</p>
+                </For>
+            }
+        }
+
+-- 3 take a reactive slice of the data structure instead of using each row directly
+--  Memoized slices
+--      ForEnumerate rather than For, so we have access to an index signal
+--      children prop explicitly, to make it easier to run some non-view code
+--      define a value memo and use that in the view. This value field doesn’t actually use 
+--       the child being passed into each row. Instead, it uses the index and reaches back 
+--       into the original data to get the value.
+        <ForEnumerate
+            each=move || data.get()
+            key=|state| state.key.clone()
+            children=move |index, _| {
+                let value = Memo::new(move |_| {
+                    data.with(|data| data.get(index.get()).map(|d| d.value).unwrap_or(0))
+                });
+                view! {
+                    <p>{value}</p>
+                }
+            }
+        />
+
+-- 4 Stores 
+--  require an additional dependency called reactive_stores in your Cargo.toml
+--  Store derive macro, which creates a getter for each field of a struct
+--  getter gives reactive access to that particular field
+--  mutating value will not notify key, and so on
+
+--  The top level of a store always needs to be a struct
+--  create a Data wrapper with a single rows field:
+        #[derive(Store, Debug, Clone)]
+        pub struct Data {
+            #[store(key: String = |row| row.key.clone())]
+            rows: Vec<DatabaseEntry>,
+        }
+        
+        #[derive(Store, Debug, Clone)]
+        struct DatabaseEntry {
+            key: String,
+            value: i32,
+        }
+--  #[store(key)] to the rows field allows keyed access to the fields of the store
+
+        <For
+            each=move || data.rows()
+            key=|row| row.read().key.clone()
+            children=|child| {
+                let value = child.value();
+                view! { <p>{move || value.get()}</p> }
+            }
+        />
+
+--  In the update button handler, iterate over the entries in rows, updating each one:
+        for row in data.rows().iter_unkeyed() {
+            *row.value().write() *= 2;
+        }
+
+-- complete store example:
+use reactive_stores::Store;
+
+#[derive(Store, Debug, Clone)]
+pub struct Data {
+    #[store(key: String = |row| row.key.clone())]
+    rows: Vec<DatabaseEntry>,
+}
+
+#[derive(Store, Debug, Clone)]
+struct DatabaseEntry {
+    key: String,
+    value: i32,
+}
+
+#[component]
+pub fn App() -> impl IntoView {
+    // instead of a signal with the rows, we create a store for Data
+    let data = Store::new(Data {
+        rows: vec![
+            DatabaseEntry {
+                key: "foo".to_string(),
+                value: 10,
+            },
+            DatabaseEntry {
+                key: "bar".to_string(),
+                value: 20,
+            },
+            DatabaseEntry {
+                key: "baz".to_string(),
+                value: 15,
+            },
+        ],
+    });
+
+    view! {
+        // when we click, update each row,
+        // doubling its value
+        <button on:click=move |_| {
+            // allows iterating over the entries in an iterable store field
+            use reactive_stores::StoreFieldIterator;
+
+            // calling rows() gives us access to the rows
+            for row in data.rows().iter_unkeyed() {
+                *row.value().write() *= 2;
+            }
+            // log the new value of the signal
+            leptos::logging::log!("{:?}", data.get());
+        }>
+            "Update Values"
+        </button>
+        // iterate over the rows and display each value
+        <For
+            each=move || data.rows()
+            key=|row| row.read().key.clone()
+            children=|child| {
+                let value = child.value();
+                view! { <p>{move || value.get()}</p> }
+            }
+        />
+    }
+}
