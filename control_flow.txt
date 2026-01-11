@@ -1,0 +1,113 @@
+-- if x() { y } else { z } and match x() { ... } return their values
+-- any T that implements IntoView can be rendered
+--  Option<T> and Result<T, impl Error> also implement IntoView
+--  Fn() -> T renders a reactive T, Fn() -> Option<T> and Fn() -> Result<T, impl Error> are reactive
+
+-- to be reactive, values must be functions
+-- wrap things in a 'move || ...' closure to ensure they update when underlying signal changes
+
+let (value, set_value) = signal(0);
+let is_odd = move || value.get() % 2 != 0;
+
+-- with above signal, this works
+view! {
+    <p>
+        {move || if is_odd() {
+            "Odd"
+        } else {
+            "Even"
+        }}
+    </p>
+}
+
+-- with above, this renders text if odd, nothing if even
+let message = move || {
+    if is_odd() {
+        Some("Ding ding ding!")
+    } else {
+        None
+    }
+};
+
+view! {
+    <p>{message}</p>
+}
+
+-- shorter version
+let message = move || is_odd().then(|| "Ding ding ding!");
+view! {
+    <p>{message}</p>
+}
+
+
+-- using match
+let message = move || {
+    match value.get() {
+        0 => "Zero",
+        1 => "One",
+        n if is_odd() => "Odd",
+        _ => "Even"
+    }
+};
+view! {
+    <p>{message}</p>
+}
+
+
+-- Preventing over-rendering
+-- consider:
+let (value, set_value) = signal(0);
+
+let message = move || if value.get() > 5 {
+    logging::log!("{}: rendering Big", value.get());
+    "Big"
+} else {
+    logging::log!("{}: rendering Small", value.get());
+    "Small"
+};
+
+view! {
+    <p>{message}</p>
+}
+
+-- logs show that text re-renders even when final value is unchanged :
+--      1: rendering Small
+--      2: rendering Small
+--      3: rendering Small
+--      4: rendering Small
+--      5: rendering Small
+--      6: rendering Big
+--      7: rendering Big
+--      8: rendering Big
+--      ... ad infinitum
+
+-- alternate:
+let message = move || if value.get() > 5 {
+    <Big/>
+} else {
+    <Small/>
+};
+-- this renders <Small/> 5 times, then <Big/> infinitly
+
+
+-- <Show/>
+--  pass it a when condition function
+--  a fallback to be shown if the when function returns false
+--  and children to be rendered if when is true
+let (value, set_value) = signal(0);
+
+view! {
+  <Show
+    when=move || { value.get() > 5 }
+    fallback=|| view! { <Small/> }
+  >
+    <Big/>
+  </Show>
+}
+
+-- <Show/> memoizes the when condition,
+-- so it only renders its <Small/> once,
+-- continuing to show the same component until value is greater than five
+-- then it renders <Big/> once, continuing to show it indefinitely or
+-- until value goes below five and then renders <Small/> again
+
