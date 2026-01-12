@@ -111,3 +111,41 @@ view! {
 -- then it renders <Big/> once, continuing to show it indefinitely or
 -- until value goes below five and then renders <Small/> again
 
+
+-- type conversion
+
+-- this will not compile, because the different HTML elements are different types:
+view! {
+    <main>
+        {move || match is_odd() {
+            true if value.get() == 1 => {
+                view! { <pre>"One"</pre> }
+            },
+            false if value.get() == 2 => {
+                view! { <p>"Two"</p> }
+            }
+            // returns HtmlElement<Textarea>
+            _ => view! { <textarea>{value.get()}</textarea> }
+        }}
+    </main>
+}
+
+-- use of .into_any() to overcome
+view! {
+    <main>
+        {move || match is_odd() {
+            true if value.get() == 1 => {
+                // returns HtmlElement<Pre>
+                view! { <pre>"One"</pre> }.into_any()
+            },
+            false if value.get() == 2 => {
+                // returns HtmlElement<P>
+                view! { <p>"Two"</p> }.into_any()
+            }
+            // returns HtmlElement<Textarea>
+            _ => view! { <textarea>{value.get()}</textarea> }.into_any()
+        }}
+    </main>
+}
+
+-- alternatly use the enum Either (and EitherOf3, EitherOf4, etc.) to convert the different types to the same type
