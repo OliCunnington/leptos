@@ -1,0 +1,95 @@
+-- WriteSignal
+--   can easily lead to spagetti code
+#[component]
+pub fn App() -> impl IntoView {
+    let (toggled, set_toggled) = signal(false);
+    view! {
+        <p>"Toggled? " {toggled}</p>
+        <ButtonA setter=set_toggled/>
+    }
+}
+
+#[component]
+pub fn ButtonA(setter: WriteSignal<bool>) -> impl IntoView {
+    view! {
+        <button
+            on:click=move |_| setter.update(|value| *value = !*value)
+        >
+            "Toggle"
+        </button>
+    }
+}
+
+-- Callback
+--   logic to mutate that signal needs to exist up in <App/>
+#[component]
+pub fn App() -> impl IntoView {
+    let (toggled, set_toggled) = signal(false);
+    view! {
+        <p>"Toggled? " {toggled}</p>
+        <ButtonB on_click=move |_| set_toggled.update(|value| *value = !*value)/>
+    }
+}
+
+#[component]
+pub fn ButtonB(on_click: impl FnMut(MouseEvent) + 'static) -> impl IntoView {
+    view! {
+        <button on:click=on_click>
+            "Toggle"
+        </button>
+    }
+}
+
+-- Event Listener
+--    pretty much the same as callback
+#[component]
+pub fn App() -> impl IntoView {
+    let (toggled, set_toggled) = signal(false);
+    view! {
+        <p>"Toggled? " {toggled}</p>
+        // note the on:click instead of on_click
+        // this is the same syntax as an HTML element event listener
+        <ButtonC on:click=move |_| set_toggled.update(|value| *value = !*value)/>
+    }
+}
+
+#[component]
+pub fn ButtonC() -> impl IntoView {
+    view! {
+        <button>"Toggle"</button>
+    }
+}
+
+-- Context API
+--   no type-safety between provide_context and use_context
+#[component]
+pub fn App() -> impl IntoView {
+    let (toggled, set_toggled) = signal(false);
+
+    // share `set_toggled` with all children of this component
+    provide_context(set_toggled);
+
+    view! {
+        <p>"Toggled? " {toggled}</p>
+        <Layout/>
+    }
+}
+
+// <Layout/> and <Content/> omitted
+// To work in this version, drop the `set_toggled` parameter on each
+
+#[component]
+pub fn ButtonD() -> impl IntoView {
+    // use_context searches up the context tree, hoping to
+    // find a `WriteSignal<bool>`
+    // in this case, I .expect() because I know I provided it
+    let setter = use_context::<WriteSignal<bool>>().expect("to have found the setter provided");
+
+    view! {
+        <button
+            on:click=move |_| setter.update(|value| *value = !*value)
+        >
+            "Toggle"
+        </button>
+    }
+}
