@@ -1,0 +1,39 @@
+-- so much jargon...
+
+
+/// Displays a `render_prop` and some children within markup.
+#[component]
+pub fn TakesChildren<F, IV>(
+    /// Takes a function (type F) that returns anything that can be
+    /// converted into a View (type IV)
+    render_prop: F,
+    /// `children` can take one of several different types, each of which
+    /// is a function that returns some view type
+    children: Children,
+) -> impl IntoView
+where
+    F: Fn() -> IV,
+    IV: IntoView,
+{
+    view! {
+        <h1><code>"<TakesChildren/>"</code></h1>
+        <h2>"Render Prop"</h2>
+        {render_prop()}
+        <hr/>
+        <h2>"Children"</h2>
+        {children()}
+    }
+}
+
+
+-- "The AnyView returned here is an opaque, type-erased view: you can’t do anything to inspect it."
+-- i can inspect it in a browser? what am i missing xD
+
+-- use of above fn
+view! {
+    <TakesChildren render_prop=|| view! { <p>"Hi, there!"</p> }>
+        // these get passed to `children`
+        "Some text"
+        <span>"A span"</span>
+    </TakesChildren>
+}

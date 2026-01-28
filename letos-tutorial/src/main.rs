@@ -62,16 +62,24 @@ fn App() -> impl IntoView {
     //     </button>
     // }
 
-    let (count, set_count) = signal(0);
+    // let (count, set_count) = signal(0);
+    // view! {
+    //     <button on:click=move |_| *set_count.write() += 1>
+    //         "Click me"
+    //     </button>
+    //     // now we use our component!
+    //     <br/>
+    //     <ProgressBar progress=count/>
+    //     <br/>
+    //     <ProgressBar max=25 progress=count/>
+    // }
+
     view! {
-        <button on:click=move |_| *set_count.write() += 1>
-            "Click me"
-        </button>
-        // now we use our component!
-        <br/>
-        <ProgressBar progress=count/>
-        <br/>
-        <ProgressBar max=25 progress=count/>
+        <TakesChildren render_prop=|| view! { <p>"Hi, there!"</p> }>
+            // these get passed to `children`
+            "Some text"
+            <span>"A span"</span>
+        </TakesChildren>
     }
 }
 
@@ -86,5 +94,30 @@ fn ProgressBar(
             max=max
             value=progress
         />
+    }
+}
+
+
+/// Displays a `render_prop` and some children within markup.
+#[component]
+pub fn TakesChildren<F, IV>(
+    /// Takes a function (type F) that returns anything that can be
+    /// converted into a View (type IV)
+    render_prop: F,
+    /// `children` can take one of several different types, each of which
+    /// is a function that returns some view type
+    children: Children,
+) -> impl IntoView
+where
+    F: Fn() -> IV,
+    IV: IntoView,
+{
+    view! {
+        <h1><code>"<TakesChildren/>"</code></h1>
+        <h2>"Render Prop"</h2>
+        {render_prop()}
+        <hr/>
+        <h2>"Children"</h2>
+        {children()}
     }
 }
