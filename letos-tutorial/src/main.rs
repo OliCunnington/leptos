@@ -79,6 +79,11 @@ fn App() -> impl IntoView {
             // these get passed to `children`
             "Some text"
             <span>"A span"</span>
+            <div style="text-aling:center">
+                <div style="display:inline-block;width:auto;background:red"><button>red</button></div>
+                <div style="display:inline-block;width:auto;background:blue"><button>blue</button></div>
+                <div style="display:inline-block;width:auto;background:green"><button>green</button></div>
+            </div>
         </TakesChildren>
     }
 }
