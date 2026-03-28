@@ -126,3 +126,14 @@ where
         {children()}
     }
 }
+
+
+#[component]
+fn PageSwitch() -> impl IntoView {
+    view! {
+        <div>
+            <button>Customer</button>
+            <button>Vendor</button>
+        </div>
+    }
+}
