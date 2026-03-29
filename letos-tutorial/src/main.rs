@@ -137,3 +137,11 @@ fn PageSwitch() -> impl IntoView {
         </div>
     }
 }
+
+// Store -> products view, add to basket, make order
+// Manage Products -> add/remove products
+
+// ReStock -> order products (resupply), add stock
+
+// Manage Orders -> process orders
+// Stats -> see order and sale stats
