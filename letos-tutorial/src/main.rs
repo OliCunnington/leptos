@@ -139,7 +139,28 @@ fn PageSwitch() -> impl IntoView {
 }
 
 // Store -> products view, add to basket, make order
+// pagnation... 9 per etc etc
+//  <style>
+//      .product_card {
+//          margin: 5;
+//          padding: 3;
+//          border-style: 2px ridge black;
+//          border-radius: 5;
+//      }
+//  </style>
+//  <div class="product_card">
+//      <image>
+//      <p>{product_name}</p>
+//      <p>{price}</p>
+//      <div class="product_hover_over">[icons]</div>
+//  </div>
+
 // Manage Products -> add/remove products
+// scroll container
+//  <button>Add New</button>
+//  <ul class="manage_product">
+//      <li>{title} {stock} [button for more, delete, edit]</li>
+//  </ul>
 
 // ReStock -> order products (resupply), add stock
 
