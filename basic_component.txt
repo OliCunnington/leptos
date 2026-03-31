@@ -1,0 +1,30 @@
+use leptos::prelude::*;
+use leptos::mount::mount_to_body;
+
+fn main() {
+    mount_to_body(App);
+}
+
+#[component]
+fn App() -> impl IntoView {
+    //signal creates a signal, returns a (getter, setter) tuple
+    //access the current value with count.get()
+    //set the current value with set_count.set(...)
+    let (count, set_count) = signal(0);
+
+    view! {
+        <button
+            on:click=move |_| set_count.set(3)
+        >
+            "Click me: "
+            // {count} passes in a signal, telling the framework to update the view every time count changes.
+            // {count.get()} accesses the value of count once, and passes an i32 into the view, rendering it once, unreactively
+            {count}
+        </button>
+        <p>
+            "Double count: "
+            // count.get() inside "closure" to render resposivly
+            {move || count.get() * 2}
+        </p>
+    }
+}

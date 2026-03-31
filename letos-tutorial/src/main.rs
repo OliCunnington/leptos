@@ -131,9 +131,10 @@ where
 #[component]
 fn PageSwitch() -> impl IntoView {
     view! {
-        <div>
-            <button>Customer</button>
-            <button>Vendor</button>
+        <div class="nav_bar">
+            <button>Store/Customer</button>
+            <button>Manage/Vendor</button>
+            <button>Sales Stats</button>
         </div>
     }
 }
