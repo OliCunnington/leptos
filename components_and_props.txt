@@ -112,7 +112,8 @@ fn App() -> impl IntoView {
 
 #[component]
 fn ProgressBar(
-    #[prop(optional)] progress: Option<Box<dyn Fn() -> i32 + Send + Sync>>,
+    #[prop(optional)] 
+    progress: Option<Box<dyn Fn() -> i32 + Send + Sync>>,
 ) -> impl IntoView {
     progress.map(|progress| {
         view! {
