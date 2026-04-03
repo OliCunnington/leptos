@@ -90,6 +90,7 @@ fn App() -> impl IntoView {
 
 #[component]
 fn ProgressBar(
+    //#[prop(optional)]
     #[prop(default = 100)]
     max: u16,
     progress: ReadSignal<i32>
