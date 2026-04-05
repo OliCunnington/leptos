@@ -184,3 +184,20 @@ view! {
         {..spread_onto_component}
     />
 }
+
+
+// does this work??
+// hmm, i think i need a component listening for the click... of each view button...
+// there was a section on passing signals coming up...
+// but this would simplify assigning style classes...
+
+#[component]
+fn ViewButton (
+    ret_view: impl Fn -> IntoView
+    ) -> impl IntoView {
+        view! {
+            <button
+                on:click=ret_view
+            />
+        }
+    }
