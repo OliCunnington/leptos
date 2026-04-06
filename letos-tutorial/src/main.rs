@@ -14,6 +14,24 @@ fn App() -> impl IntoView {
     let double_count = move || count.get() * 2;
     let (__count, __set_count) = signal(0);
 
+    // create a list of 5 signals
+    let length = 5;
+    let counters = (1..=length).map(|idx| RwSignal::new(idx));
+
+    let counter_buttons = counters
+        .map(|count| {
+            view! {
+                <li>
+                    <button
+                        on:click=move |_| *count.write() += 1
+                    >
+                        {count}
+                    </button>
+                </li>
+            }
+        })
+        .collect_view();
+
     view! {
         <button
             on:click= //move |_| set_count.set(3)
@@ -68,6 +86,10 @@ fn App() -> impl IntoView {
                 <div style="display:inline-block;width:auto;background:green"><button>green</button></div>
             </div>
         </TakesChildren>
+
+
+        <ul>{counter_buttons}</ul>
+        
     }
 }
 
