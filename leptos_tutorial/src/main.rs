@@ -32,6 +32,7 @@ fn App() -> impl IntoView {
         </passing_children_to_components::TakesChildren>
 
         <itteration::ItterateStaticViews/>
+        <itteration::ItterateDynamicList initial_length=5/>
 
     }
 }

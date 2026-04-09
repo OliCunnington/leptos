@@ -9,6 +9,7 @@ pub fn ProgressBarProp() -> impl IntoView {
         <button on:click=move |_| *set_count.write() += 1>
             "Click me"
         </button>
+        <br/>
         <ProgressBar progress=count/>
         <ProgressBar progress=Signal::derive(double_count)/>
     }
@@ -16,6 +17,8 @@ pub fn ProgressBarProp() -> impl IntoView {
 
 #[component]
 fn ProgressBar(
+    #[prop(optional)]
+    min: u16,
     #[prop(default = 100)]
     max: u16,
     #[prop(into)]
@@ -24,6 +27,7 @@ fn ProgressBar(
 {
     view! {
         <progress
+            min=min
             max=max
             value=progress
         />
