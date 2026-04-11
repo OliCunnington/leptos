@@ -91,18 +91,18 @@ struct Counter {
 }
 
 
-pub fn ItterateDynamicListWithEnumerate() -> impl IntoView {
+// pub fn ItterateDynamicListWithEnumerate() -> impl IntoView {
 
-    //TODO
-    view! {
-        <ForEnumerate
-            each=move || counters.get() 
-            key=|counter| counter.id    
-            children={move |index: ReadSignal<usize>, counter: Counter| {
-                view! {
-                    <button>{move || index.get()} ". Value: " {move || counter.count.get()}</button>
-                }
-            }}
-        />
-    }
-}
+//     //TODO
+//     view! {
+//         <ForEnumerate
+//             each=move || counters.get() 
+//             key=|counter| counter.id    
+//             children={move |index: ReadSignal<usize>, counter: Counter| {
+//                 view! {
+//                     <button>{move || index.get()} ". Value: " {move || counter.count.get()}</button>
+//                 }
+//             }}
+//         />
+//     }
+// }
