@@ -91,9 +91,25 @@ struct Counter {
 }
 
 
-// pub fn ItterateDynamicListWithEnumerate() -> impl IntoView {
+// pub fn ItterateDynamicListWithEnumerate(
+//  initial_length: usize,
+// ) -> impl IntoView {
+//     let mut next_counter_id = initial_length;
 
-//     //TODO
+//     let initial_counters = (0..initial_length)
+//         .map(|id| (id, ArcRwSignal::new(id + 1)))
+//         .collect::<Vec<_>>();
+
+//     let (counters, set_counters) = signal(initial_counters);
+
+//     let add_counter = move |_| {
+//         let sig = ArcRwSignal::new(next_counter_id + 1);
+//         set_counters.update(move |counters| {
+//             counters.push((next_counter_id, sig))
+//         });
+//         next_counter_id += 1;
+//     };
+
 //     view! {
 //         <ForEnumerate
 //             each=move || counters.get() 
