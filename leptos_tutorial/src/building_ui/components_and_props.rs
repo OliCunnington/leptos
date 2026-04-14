@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos::attr::Attribute;
 
 #[component]
 pub fn ProgressBarProp() -> impl IntoView {

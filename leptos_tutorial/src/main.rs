@@ -2,6 +2,8 @@ use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 use leptos_tutorial::*;
 
+mod building_ui;
+
 fn main() {
     mount_to_body(App);
 }
@@ -13,14 +15,14 @@ fn App() -> impl IntoView {
 
     view! {
 
-        <basic_component::BasicComponent/>
+        <building_ui::basic_component::BasicComponent/>
 
-        <dynamic_attributes::DynamicClass/>
-        <dynamic_attributes::DynamicStyle/>
+        <building_ui::dynamic_attributes::DynamicClass/>
+        <building_ui::dynamic_attributes::DynamicStyle/>
 
-        <components_and_props::ProgressBarProp/>
+        <building_ui::components_and_props::ProgressBarProp/>
 
-        <passing_children_to_components::TakesChildren render_prop=|| view! { <p>"Hi, there!"</p> }>
+        <building_ui::passing_children_to_components::TakesChildren render_prop=|| view! { <p>"Hi, there!"</p> }>
             // these get passed to `children`
             "Some text"
             <span>"A span"</span>
@@ -29,10 +31,10 @@ fn App() -> impl IntoView {
                 <div style="display:inline-block;width:auto;background:blue"><button>blue</button></div>
                 <div style="display:inline-block;width:auto;background:green"><button>green</button></div>
             </div>
-        </passing_children_to_components::TakesChildren>
+        </building_ui::passing_children_to_components::TakesChildren>
 
-        <itteration::ItterateStaticViews/>
-        <itteration::ItterateDynamicList initial_length=5/>
+        <building_ui::itteration::ItterateStaticViews/>
+        <building_ui::itteration::ItterateDynamicList initial_length=5/>
 
     }
 }
