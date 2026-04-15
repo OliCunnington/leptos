@@ -3,6 +3,7 @@ use leptos::prelude::*;
 use leptos_tutorial::*;
 
 mod building_ui;
+mod reactivity;
 
 fn main() {
     mount_to_body(App);
