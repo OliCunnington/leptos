@@ -29,6 +29,54 @@ pub fn NoUser() -> impl IntoView {
     }
 }
 
+//outlet example
+// required for rendering of nested child view...
+#[component]
+pub fn ContactList() -> impl IntoView {
+  let contacts = todo!();
+
+  view! {
+    <div style="display: flex">
+      // the contact list
+      <For each=contacts
+        key=|contact| contact.id
+        children=|contact| todo!()
+      />
+      // the nested child, if any
+      // don’t forget this!
+      <Outlet/>
+    </div>
+  }
+}
+
+#[component]
+pub fn ContactInfo() -> impl IntoView {
+    view!{
+        <h1>"ContactInfo"</h1>
+    }
+}
+
+#[component]
+pub fn EmailAndPhone() -> impl IntoView {
+    view!{
+        <h1>"EmailAndPhone"</h1>
+    }
+}
+
+#[component]
+pub fn Address() -> impl IntoView {
+    view!{
+        <h1>"Address"</h1>
+    }
+}
+
+#[component]
+pub fn Messages() -> impl IntoView {
+    view!{
+        <h1>"Messages"</h1>
+    }
+}
+
 #[component]
 pub fn NestedRoutesExample() -> impl IntoView {
     view! {
@@ -50,3 +98,56 @@ pub fn NestedRoutesExample() -> impl IntoView {
     }
 }
 
+#[component]
+pub fn DeeperNestedRoutesExample() -> impl IntoView {
+    view! {
+      <Router>
+        <nav>
+          /* ... */
+        </nav>
+        <main>
+            <Routes fallback=|| "Not found.">
+                <ParentRoute path=path!("/contacts") view=ContactList>
+                    <ParentRoute path=path!(":id") view=ContactInfo>
+                        <Route path=path!("") view=EmailAndPhone/>
+                        <Route path=path!("address") view=Address/>
+                        <Route path=path!("messages") view=Messages/>
+                    </ParentRoute>
+                    <Route path=path!("") view=|| view! {
+                        <p>"Select a contact to view more info."</p>
+                    }/>
+                </ParentRoute>
+            </Routes>
+        </main>
+      </Router>
+    }
+}
+
+#[component]
+pub fn MultiComponentRoutesExample() -> impl IntoView {
+    view! {
+      <Router>
+        <Routes fallback=|| "Not found.">
+          <ParentRoute path=path!("/contacts") view=ContactList>
+            <ContactInfoRoutes/>
+            <Route path=path!("") view=|| view! {
+              <p>"Select a contact to view more info."</p>
+            }/>
+          </ParentRoute>
+        </Routes>
+      </Router>
+    }
+}
+
+#[component(transparent)]
+fn ContactInfoRoutes() -> impl MatchNestedRoutes + Clone {
+    view! {
+      <ParentRoute path=path!(":id") view=ContactInfo>
+        <Route path=path!("") view=EmailAndPhone/>
+        <Route path=path!("address") view=Address/>
+        <Route path=path!("messages") view=Messages/>
+      </ParentRoute>
+    }
+    .into_inner()
+    .into_any_nested_route()
+}
