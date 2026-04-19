@@ -34,10 +34,10 @@ pub fn TypedExample() -> impl IntoView {
             .and_then(|params| params.id)
             .unwrap_or_default()
     };
-    let name = move || match id().as_str() {
-        "alice" => "Alice",
-        "bob" => "Bob",
-        "steve" => "Steve",
+    let name = move || match id() {
+        0 => "Alice",
+        1 => "Bob",
+        2 => "Steve",
         _ => "User not found.",
     };
     view!{
@@ -53,7 +53,7 @@ pub fn UntypedExample() -> impl IntoView {
 
     // id: || -> Option<String>
     // returns Memo<ParamsMap> (.../:id)
-    let id = move || params.read().get("id");
+    let id = move || params.read().get("id").unwrap();
     let name = move || match id().as_str() {
         "alice" => "Alice",
         "bob" => "Bob",

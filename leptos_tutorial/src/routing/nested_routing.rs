@@ -1,5 +1,7 @@
 use leptos::prelude::*;
-use leptos_router::components::{Router, Route, Routes};
+use leptos_router::components::{Router, Route, Routes, ParentRoute};
+use leptos_router::MatchNestedRoutes;
+use leptos_router::any_nested_route::IntoAnyNestedRoute;
 
 #[component]
 pub fn Home() -> impl IntoView {
@@ -33,14 +35,14 @@ pub fn NoUser() -> impl IntoView {
 // required for rendering of nested child view...
 #[component]
 pub fn ContactList() -> impl IntoView {
-  let contacts = todo!();
+  let contacts = vec![{"id":0,"name":"alice"},{"id":1,"name":"bob"}, {"id":2,"name":"charles"}];
 
   view! {
     <div style="display: flex">
       // the contact list
       <For each=contacts
         key=|contact| contact.id
-        children=|contact| todo!()
+        children={move |contact| {view!{<p>{contact}</p>}}}
       />
       // the nested child, if any
       // don’t forget this!
@@ -86,12 +88,12 @@ pub fn NestedRoutesExample() -> impl IntoView {
         </nav>
         <main>
             <Routes fallback=|| "Not found.">
-            <Route path=path!("/") view=Home/>
-            <ParentRoute path=path!("/users") view=Users>
+            <Route path=path!("/routing/nested") view=Home/>
+            <ParentRoute path=path!("/routing/nested/users") view=Users>
                 <Route path=path!(":id") view=UserProfile/>
                 <Route path=path!("") view=NoUser/> 
             </ParentRoute>
-            <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
+            <Route path=path!("/routing/nested/*any") view=|| view! { <h1>"Not Found"</h1> }/>
             </Routes>
         </main>
       </Router>
@@ -107,7 +109,7 @@ pub fn DeeperNestedRoutesExample() -> impl IntoView {
         </nav>
         <main>
             <Routes fallback=|| "Not found.">
-                <ParentRoute path=path!("/contacts") view=ContactList>
+                <ParentRoute path=path!("/routing/nested/deeper/contacts") view=ContactList>
                     <ParentRoute path=path!(":id") view=ContactInfo>
                         <Route path=path!("") view=EmailAndPhone/>
                         <Route path=path!("address") view=Address/>
@@ -128,7 +130,7 @@ pub fn MultiComponentRoutesExample() -> impl IntoView {
     view! {
       <Router>
         <Routes fallback=|| "Not found.">
-          <ParentRoute path=path!("/contacts") view=ContactList>
+          <ParentRoute path=path!("/routing/nested/multi/contacts") view=ContactList>
             <ContactInfoRoutes/>
             <Route path=path!("") view=|| view! {
               <p>"Select a contact to view more info."</p>

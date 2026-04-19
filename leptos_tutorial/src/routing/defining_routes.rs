@@ -11,10 +11,10 @@ pub fn RouterExample() -> impl IntoView {
         <main>
           // all our routes will appear inside <main>
           <Routes fallback=|| "Not found.">
-            <Route path=path!("/") view=Home/>
-            <Route path=path!("/users") view=Users/>
-            <Route path=path!("/users/:id") view=UserProfile/>
-            <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
+            <Route path=path!("/routing") view=Home/>
+            <Route path=path!("/routing/users") view=Users/>
+            <Route path=path!("/routing/users/:id") view=UserProfile/>
+            <Route path=path!("/routing/*any") view=|| view! { <h1>"Not Found"</h1> }/>
           </Routes>
         </main>
       </Router>

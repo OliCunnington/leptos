@@ -22,18 +22,18 @@ pub fn AElementExample() -> impl IntoView {
             // note: we can just use normal <a> tags
             // and the router will use client-side navigation
             <nav>
-                <a href="/">"Home"</a>
-                <a href="/contacts">"Contacts"</a>
+                <a href="/routing/a">"Home"</a>
+                <a href="/routing/a/contacts">"Contacts"</a>
             </nav>
             <main>
                 <Routes fallback=|| "Not found.">
                     // / just has an un-nested "Home"
-                    <Route path=path!("/") view=|| view! {
+                    <Route path=path!("/routing/a") view=|| view! {
                         <h3>"Home"</h3>
                     }/>
                     // /contacts has nested routes
                     <ParentRoute
-                        path=path!("/contacts")
+                        path=path!("/routing/a/contacts")
                         view=ContactList
                       >
                         // if no id specified, fall back

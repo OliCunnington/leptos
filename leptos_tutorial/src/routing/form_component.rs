@@ -1,20 +1,25 @@
-use leptops::prelude::*;
+use leptos::prelude::*;
+use leptos::prelude::Resource;
 use leptos_router::components::{Form, Route, Router, Routes};
 use leptos_router::hooks::use_query_map;
 use leptos_router::path;
+use leptos_router::MatchNestedRoutes; 
+use leptos_router::any_nested_route::IntoAnyNestedRoute;
 
-#[component]
-pub fn Demo() -> impl IntoView {
+#[component(transparent)]
+pub fn Demo() -> impl MatchNestedRoutes + Clone {
     view! {
-        <Router>
-            <h1><code>"<Form/>"</code></h1>
-            <main>
-                <Routes fallback=|| "Not found.">
-                    <Route path=path!("") view=FormExample/>
-                </Routes>
-            </main>
-        </Router>
+        // <Router>
+        //     <h1><code>"<Form/>"</code></h1>
+        //     <main>
+                // <Routes fallback=|| view! { <h1>"Not Found"</h1> }>
+                    <Route path=path!("/routing/form") view=FormExample/>
+                // </Routes>
+        //     </main>
+        // </Router>
     }
+    .into_inner()
+    .into_any_nested_route()
 }
 
 #[component]
@@ -117,13 +122,14 @@ pub fn FormSearchExample() -> impl IntoView {
     view! {
         <Form method="GET" action="">
             <input type="search" name="q" value=search
-             oninput="this.form.requestSubmit()"
+            oninput="this.form.requestSubmit()"
             />
             // <input type="submit"/> // replaced with oninput
         </Form>
-        <Transition fallback=move || ()>
+        <Transition fallback=move || view! { <h1>"Not Found"</h1> }>
             /* render search results */
-            {todo!()}
-        </Transition>
+            // {todo!()}
+            <p>"Some Result"</p>
+        </Transition>   
     }
 }
