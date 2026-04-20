@@ -32,7 +32,7 @@ pub fn NoUser() -> impl IntoView {
     }
 }
 
-#[derive(Store, Debug, Clone)]
+#[derive(Debug, Clone)]
 struct Contact {
     id: usize;
     name: String;   
@@ -42,17 +42,17 @@ struct Contact {
 // required for rendering of nested child view...
 #[component]
 pub fn ContactList() -> impl IntoView {
-  let contacts = vec![
+  let (contacts, set_contacts) = signal(vec![
     Contact{id:0,name:"alice"},
     Contact{id:1,name:"bob"},
     Contact{id:2,name:"charles"}
-  ];
+  ]);
 
   view! {
     <div style="display: flex">
       // the contact list
-      <For each=contacts
-        key=|contact| contact.id.clone()
+      <For each=contacts.get()
+        key=|contact| contact.id
         children={move |contact| {
             view!{<p>{contact}</p>}
         }}
