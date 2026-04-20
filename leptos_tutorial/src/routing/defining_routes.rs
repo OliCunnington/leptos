@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use leptos_router::components::{Router, Route, Routes};
+use leptos_router::path;
 
 #[component]
 pub fn RouterExample() -> impl IntoView {

@@ -1,5 +1,6 @@
 use leptos::prelude::*;
-use leptos_router::components::{Router, Route, Routes, ParentRoute};
+use leptos_router::components::{Outlet, Router, Route, Routes, ParentRoute};
+use leptos_router::path;
 use leptos_router::MatchNestedRoutes;
 use leptos_router::any_nested_route::IntoAnyNestedRoute;
 
@@ -31,18 +32,30 @@ pub fn NoUser() -> impl IntoView {
     }
 }
 
+#[derive(Store, Debug, Clone)]
+struct Contact {
+    id: usize;
+    name: String;   
+}
+
 //outlet example
 // required for rendering of nested child view...
 #[component]
 pub fn ContactList() -> impl IntoView {
-  let contacts = vec![{"id":0,"name":"alice"},{"id":1,"name":"bob"}, {"id":2,"name":"charles"}];
+  let contacts = vec![
+    Contact{id:0,name:"alice"},
+    Contact{id:1,name:"bob"},
+    Contact{id:2,name:"charles"}
+  ];
 
   view! {
     <div style="display: flex">
       // the contact list
       <For each=contacts
-        key=|contact| contact.id
-        children={move |contact| {view!{<p>{contact}</p>}}}
+        key=|contact| contact.id.clone()
+        children={move |contact| {
+            view!{<p>{contact}</p>}
+        }}
       />
       // the nested child, if any
       // don’t forget this!

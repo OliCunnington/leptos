@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use gloo_timers::future::TimeoutFuture;
 
 // basic loading screen (fallback)
 // let (count, set_count) = signal(0);
@@ -33,8 +34,18 @@ use leptos::prelude::*;
 pub fn SuspenseComponentExample() -> impl IntoView {
     let (count, set_count) = signal(0);
     let (count2, set_count2) = signal(0);
-    let a = Resource::new(count, |count| async move { load_a(count).await });
-    let b = Resource::new(count2, |count| async move { load_b(count).await });
+    let a = Resource::new(
+        move || count.get(), 
+        |count| async move { 
+            load_a(count).await 
+        }
+    );
+    let b = Resource::new(
+        move || count2.get(), 
+        |count| async move { 
+            load_b(count).await 
+        }
+    );
 
     view! {
         <h1>"My Data"</h1>
@@ -55,6 +66,31 @@ pub fn SuspenseComponentExample() -> impl IntoView {
         </Suspense>
     }
 }
+
+#[component]
+pub fn ShowA(a: i32) -> impl IntoView {
+    view!{
+        <p>"A : "{a}</p>
+    }
+}
+
+#[component]
+pub fn ShowB(b: i32) -> impl IntoView {
+    view!{
+        <p>"B : "{b}</p>
+    }
+}
+
+async fn load_a(name: i32) -> i32 {
+    TimeoutFuture::new(1_000).await;
+    name
+}
+
+async fn load_b(name: i32) -> i32 {
+    TimeoutFuture::new(1_000).await;
+    name
+}
+
 
 // suspend inside suspense
 // allows avoiding null checks in each resource

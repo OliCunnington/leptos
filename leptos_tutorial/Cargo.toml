@@ -5,6 +5,9 @@ edition = "2021"
 
 [dependencies]
 console_error_panic_hook = "0.1.7"
+gloo-timers = { version = "0.4.0", features = ["futures"] }
 leptos = { version = "0.8.3", features = ["csr"] }
 leptos_router = "0.8.13"
 reactive_stores = "0.4.2"
+send_wrapper = "0.6.0"
+uuid = "1.23.1"

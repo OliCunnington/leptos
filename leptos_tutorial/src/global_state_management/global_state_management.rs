@@ -27,7 +27,7 @@ fn PassingSignalsThroughContext() -> impl IntoView {
 
 #[component]
 fn SetterButton(set_count: WriteSignal<i32>) -> impl IntoView {
-    view {
+    view! {
         <button on:click=move || set_count.write() += 1>"+"</button>
     }
 }
