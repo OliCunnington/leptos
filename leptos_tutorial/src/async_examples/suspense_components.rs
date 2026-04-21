@@ -32,19 +32,13 @@ use gloo_timers::future::TimeoutFuture;
 
 #[component]
 pub fn SuspenseComponentExample() -> impl IntoView {
-    let (count, set_count) = signal(0);
-    let (count2, set_count2) = signal(0);
-    let a = Resource::new(
-        move || count.get(), 
-        |count| async move { 
-            load_a(count).await 
-        }
+    let (count, set_count) = signal("A");
+    let (count2, set_count2) = signal("B");
+    let a = LocalResource::new(
+        move || load_a(count.to_string())
     );
-    let b = Resource::new(
-        move || count2.get(), 
-        |count| async move { 
-            load_b(count).await 
-        }
+    let b = LocalResource::new(
+        move || load_b(count2.to_string())
     );
 
     view! {
@@ -68,25 +62,25 @@ pub fn SuspenseComponentExample() -> impl IntoView {
 }
 
 #[component]
-pub fn ShowA(a: i32) -> impl IntoView {
+pub fn ShowA(a: String) -> impl IntoView{
     view!{
         <p>"A : "{a}</p>
     }
 }
 
 #[component]
-pub fn ShowB(b: i32) -> impl IntoView {
+pub fn ShowB(b: String) -> impl IntoView{
     view!{
         <p>"B : "{b}</p>
     }
 }
 
-async fn load_a(name: i32) -> i32 {
+async fn load_a(name: String) -> String {
     TimeoutFuture::new(1_000).await;
     name
 }
 
-async fn load_b(name: i32) -> i32 {
+async fn load_b(name: String) -> String {
     TimeoutFuture::new(1_000).await;
     name
 }

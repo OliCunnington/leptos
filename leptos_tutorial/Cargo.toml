@@ -10,4 +10,4 @@ leptos = { version = "0.8.3", features = ["csr"] }
 leptos_router = "0.8.13"
 reactive_stores = "0.4.2"
 send_wrapper = "0.6.0"
-uuid = "1.23.1"
+uuid = { version="1.23.1", features=["v4", "js"] }
