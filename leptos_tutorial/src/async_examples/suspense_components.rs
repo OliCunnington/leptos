@@ -35,10 +35,10 @@ pub fn SuspenseComponentExample() -> impl IntoView {
     let (count, set_count) = signal("A");
     let (count2, set_count2) = signal("B");
     let a = LocalResource::new(
-        move || load_a(count.to_string())
+        move || load_a(count.get().to_string())
     );
     let b = LocalResource::new(
-        move || load_b(count2.to_string())
+        move || load_b(count2.get().to_string())
     );
 
     view! {

@@ -2,6 +2,7 @@ use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 use leptos_tutorial::*;
 use leptos_router::components::{Router, Route, Routes};
+use leptos_router::path;
 
 mod building_ui;
 mod reactivity;
@@ -27,36 +28,77 @@ fn App() -> impl IntoView {
             </nav>
             <main>
                 <Routes fallback=|| view! { <h1>"Not Found"</h1> }>
-                    <Route path=path!("/building_ui") view= />
-                    <Route path=path!("/reactivity") view= />
-                    <Route path=path!("/testing") view= />
-                    <Route path=path!("/async") view= />
-                    <Route path=path!("/projecting_children") view= />
-                    <Route path=path!("/global_state_management") view= />
-                    <Route path=path!("/routing") view= />
+                    <Route path=path!("/") view=Home />
+                    <Route path=path!("/building_ui") view=BuildingUI />
+                    <Route path=path!("/reactivity") view=Reactivity />
+                    <Route path=path!("/testing") view=Testing />
+                    <Route path=path!("/async") view=AsyncExamples />
+                    <Route path=path!("/projecting_children") view=ProjectingChildren />
+                    <Route path=path!("/global_state_management") view=GlobalStateManagement />
+                    <Route path=path!("/routing") view=Routing />
                     <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
         </Router>
 
-        // <building_ui::basic_component::BasicComponent/>
-
-        // <building_ui::dynamic_attributes::DynamicClass/>
-        // <building_ui::dynamic_attributes::DynamicStyle/>
-
-        // <building_ui::components_and_props::ProgressBarProp/>
-
-        // <building_ui::passing_children_to_components::TakesChildren render_prop=|| view! { <p>"Hi, there!"</p> }>
-        //     // these get passed to `children`
-        //     "Some text"
-        //     <span>"A span"</span>
-        // </building_ui::passing_children_to_components::TakesChildren>
-
-        // <building_ui::itteration::ItterateStaticViews/>
-        // <building_ui::itteration::ItterateDynamicList initial_length=5/>
     }
 }
 
+#[component]
+pub fn Home() -> impl IntoView {
+    view!{}
+}
+
+#[component]
+pub fn BuildingUI() -> impl IntoView {
+    view!{
+        <building_ui::basic_component::BasicComponent/>
+
+        <building_ui::dynamic_attributes::DynamicClass/>
+        <building_ui::dynamic_attributes::DynamicStyle/>
+
+        <building_ui::components_and_props::ProgressBarProp/>
+
+        <building_ui::passing_children_to_components::TakesChildren render_prop=|| view! { <p>"Hi, there!"</p> }>
+            // these get passed to `children`
+            "Some text"
+            <span>"A span"</span>
+        </building_ui::passing_children_to_components::TakesChildren>
+
+        <building_ui::itteration::ItterateStaticViews/>
+        <building_ui::itteration::ItterateDynamicList initial_length=5/>
+    }
+}
+
+#[component]
+pub fn Reactivity() -> impl IntoView {
+    view!{}
+}
+
+#[component]
+pub fn Testing() -> impl IntoView {
+    view!{}
+}
+
+#[component]
+pub fn AsyncExamples() -> impl IntoView {
+    view!{}
+}
+
+#[component]
+pub fn ProjectingChildren() -> impl IntoView {
+    view!{}
+}
+
+#[component]
+pub fn GlobalStateManagement() -> impl IntoView {
+    view!{}
+}
+
+#[component]
+pub fn Routing() -> impl IntoView {
+    view!{}
+}
 
 
 
