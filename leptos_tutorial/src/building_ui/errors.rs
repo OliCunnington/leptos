@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 
 #[component]
-pub fn NumericInpuNoErrorHandling() -> impl IntoView {
+pub fn NumericInputNoErrorHandling() -> impl IntoView {
     let (value, set_value) = signal(Ok(0));
 
     view! {

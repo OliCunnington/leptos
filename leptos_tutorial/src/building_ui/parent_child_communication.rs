@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos::ev::MouseEvent;
 
 #[component]
 pub fn PassingAWriteSignal() -> impl IntoView {

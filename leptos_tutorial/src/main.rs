@@ -59,14 +59,39 @@ pub fn BuildingUI() -> impl IntoView {
 
         <building_ui::components_and_props::ProgressBarProp/>
 
-        <building_ui::passing_children_to_components::TakesChildren render_prop=|| view! { <p>"Hi, there!"</p> }>
+        <building_ui::itteration::ItterateStaticViews/>
+        <building_ui::itteration::ItterateDynamicList initial_length=5/>
+
+        <building_ui::itterating_over_complex_data::ItterateOverComplexData />
+        <building_ui::itterating_over_complex_data::NestedSignalItterateOverComplexData />
+        <building_ui::itterating_over_complex_data::MemoizedSlicesItterateOverComplexData />
+        <building_ui::itterating_over_complex_data::StoresItterateOverComplexData />
+        
+        <building_ui::forms_and_input::ControlledInput />
+        <building_ui::forms_and_input::BoundInputs />
+        <building_ui::forms_and_input::UncontrolledInputs />
+        <building_ui::forms_and_input::TextAreaWithInput />
+        <building_ui::forms_and_input::SelectWithInput />
+
+        <building_ui::control_flow::IfStatement />
+        <building_ui::control_flow::OptionView />
+        <building_ui::control_flow::MatchStatement />
+        <building_ui::control_flow::ShowStatement />
+
+        <building_ui::errors::NumericInputNoErrorHandling />
+        <building_ui::errors::NumericInputErrorHandling />
+
+        <building_ui::parent_child_communication::PassingAWriteSignal />
+        <building_ui::parent_child_communication::UsingACallback />
+        <building_ui::parent_child_communication::UsingEventListener />
+        <building_ui::parent_child_communication::ProvidingContext />
+
+        <building_ui::passing_children_to_components::TakesChildren 
+            render_prop=|| view! { <p>"Hi, there!"</p> }>
             // these get passed to `children`
             "Some text"
             <span>"A span"</span>
         </building_ui::passing_children_to_components::TakesChildren>
-
-        <building_ui::itteration::ItterateStaticViews/>
-        <building_ui::itteration::ItterateDynamicList initial_length=5/>
     }
 }
 
