@@ -2,6 +2,10 @@
 <html>
   <head>
     <style>
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
       .red {
         color: red;
       }
@@ -9,16 +13,17 @@
         margin: 50px;
       }
       nav {
-        display: inline-block;
+        justify-content: space-evenly;
+        display: flex;
         position: absolute;
       }
       a {
-        padding: auto;
+        padding: 14px 16px;
         text-align: center;
         color: white;
         background-color: black;
       }
-      a :hover {
+      a:hover {
         background-color: white;
         color: black;
       }

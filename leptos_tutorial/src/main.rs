@@ -6,6 +6,7 @@ use leptos_router::path;
 
 mod building_ui;
 mod reactivity;
+mod async_examples;
 
 fn main() {
     mount_to_body(App);
@@ -97,7 +98,16 @@ pub fn BuildingUI() -> impl IntoView {
 
 #[component]
 pub fn Reactivity() -> impl IntoView {
-    view!{}
+    view!{
+        <reactivity::working_with_signals::ClonesAndReplacesVec />
+        <reactivity::working_with_signals::ModifyInPlaceVec />
+        <reactivity::working_with_signals::BIsAFunctionOfA />
+        <reactivity::working_with_signals::CIsAfunctionOfAAndB />
+        <reactivity::working_with_signals::AAndBAreIndependentSignals />
+
+        <reactivity::effects::ExampleWithEffect />
+        <reactivity::effects::EffectAsAbstraction />
+    }
 }
 
 #[component]
@@ -107,7 +117,15 @@ pub fn Testing() -> impl IntoView {
 
 #[component]
 pub fn AsyncExamples() -> impl IntoView {
-    view!{}
+    view!{
+        <async_examples::loading_data_with_resources::LocalResourcesExample />
+
+        <async_examples::suspense_components::SuspenseComponentExample />
+
+        <async_examples::transition_example::TransitionExample />
+
+        <async_examples::mutating_data_with_actions::AsyncActionExample />
+    }
 }
 
 #[component]
@@ -117,7 +135,10 @@ pub fn ProjectingChildren() -> impl IntoView {
 
 #[component]
 pub fn GlobalStateManagement() -> impl IntoView {
-    view!{}
+    view!{
+        <global_state_management::global_state_management::PassingSignalsThroughContext />
+        
+        <global_state_management::global_state_management::GlobalStateStoreExample />
 }
 
 #[component]
