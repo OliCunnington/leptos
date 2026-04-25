@@ -112,7 +112,9 @@ pub fn Reactivity() -> impl IntoView {
 
 #[component]
 pub fn Testing() -> impl IntoView {
-    view!{}
+    view!{
+        // needs review - seems to want its own shit
+    }
 }
 
 #[component]
@@ -130,22 +132,24 @@ pub fn AsyncExamples() -> impl IntoView {
 
 #[component]
 pub fn ProjectingChildren() -> impl IntoView {
-    view!{}
+    view!{
+        // what the fuck even is that <F, IV> -> impl ... where ...
+    }
 }
 
 #[component]
 pub fn GlobalStateManagement() -> impl IntoView {
     view!{
         <global_state_management::global_state_management::PassingSignalsThroughContext />
-        
+
         <global_state_management::global_state_management::GlobalStateStoreExample />
 }
 
 #[component]
 pub fn Routing() -> impl IntoView {
-    view!{}
+    view!{
+        // this needs to be done in main route?
+        // nest the examples ?
+        // #[component(transparent)]
+    }
 }
-
-
-
-
