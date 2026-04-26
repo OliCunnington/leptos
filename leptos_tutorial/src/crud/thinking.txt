@@ -1,0 +1,7 @@
+need a row for each prod
+clicking row should show expanded details
+
+create, read, update, delete
+
+create-> modal 
+delete-> confirm
