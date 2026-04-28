@@ -7,6 +7,8 @@ use leptos_router::path;
 mod building_ui;
 mod reactivity;
 mod async_examples;
+mod crud;
+mod global_state_management;
 
 fn main() {
     mount_to_body(App);
@@ -26,6 +28,7 @@ fn App() -> impl IntoView {
                 <a href="/projecting_children">"Projecting Children"</a>
                 <a href="/global_state_management">"Global State Management"</a>
                 <a href="/routing">"Routing"</a>
+                <a href="/crud">"CRUD"</a>
             </nav>
             <main>
                 <Routes fallback=|| view! { <h1>"Not Found"</h1> }>
@@ -37,6 +40,7 @@ fn App() -> impl IntoView {
                     <Route path=path!("/projecting_children") view=ProjectingChildren />
                     <Route path=path!("/global_state_management") view=GlobalStateManagement />
                     <Route path=path!("/routing") view=Routing />
+                    <Route path=path!("/crud") view=crud::products::Products />
                     <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
@@ -143,6 +147,7 @@ pub fn GlobalStateManagement() -> impl IntoView {
         <global_state_management::global_state_management::PassingSignalsThroughContext />
 
         <global_state_management::global_state_management::GlobalStateStoreExample />
+    }
 }
 
 #[component]

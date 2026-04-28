@@ -7,7 +7,7 @@
 use leptos::prelude::*;
 
 #[component]
-fn PassingSignalsThroughContext() -> impl IntoView {
+pub fn PassingSignalsThroughContext() -> impl IntoView {
     // here we create a signal in the root that can be consumed
     // anywhere in the app.
     let (count, set_count) = signal(0);
@@ -66,7 +66,7 @@ struct GlobalState {
 }
 
 #[component]
-fn GlobalStateStoreExample() -> impl IntoView {
+pub fn GlobalStateStoreExample() -> impl IntoView {
     provide_context(Store::new(GlobalState::default()));
 
     // etc.
@@ -77,7 +77,7 @@ fn GlobalStateStoreExample() -> impl IntoView {
 
 /// A component that updates the count in the global state.
 #[component]
-fn GlobalStateCounter() -> impl IntoView {
+pub fn GlobalStateCounter() -> impl IntoView {
     let state = expect_context::<Store<GlobalState>>();
 
     // this gives us reactive access to the `count` field only
