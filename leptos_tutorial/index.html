@@ -20,29 +20,34 @@
         display: flex;
         position: absolute;
       }
-      a {
+      nav > a {
         padding: 14px 16px;
         text-align: center;
         color: white;
         background-color: black;
       }
-      a:hover {
+      nav > a:hover {
         background-color: white;
         color: black;
       }
       li > a {
-        display: flex;
-        justify-content: space-evenly;
+        display: block;
         padding: 0px;
-        background-color: gray;
+        margin-bottom: 1px;
+        background-color: whitesmoke;
         color: black;
+        border: 1px solid black;
+        border-radius: 3px;
       }
       li > a:hover {
-        background-color: whitesmoke;
+        background-color: white;
+      }
+      li > a > div {
+        display: inline-flex;
+        justify-content: space-between;
       }
       li > a > div > p {
-        display: inline-flex;
-        justify-self: space-evenly;
+        padding: 5px;
       }
     </style>
   </head>

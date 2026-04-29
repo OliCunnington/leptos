@@ -1,5 +1,8 @@
 use leptos::prelude::*;
+use leptos::Params;
 use leptos_router::components::{Outlet, A};
+use leptos_router::params::Params;
+use leptos_router::hooks::use_params_map;
 
 struct Product {
     key: String,
@@ -10,11 +13,24 @@ struct Product {
     supplier: String
 }
 
+#[derive(Params, PartialEq)]
+struct ProductParam {
+    id: Option<String>,
+}
+
 #[component]
-pub fn ProductRow(prod: Product) -> impl IntoView {
+pub fn ProductRow(prod: Product, select: WriteSignal<String>) -> impl IntoView {
+    let selected = use_context::<ReadSignal<String>>();
+
     view!{
         <li>
-            <A href={prod.key} >
+            <A href={prod.key.clone()} on:click= move |_| {
+                if selected.read().expect("Some string?").to_string() == prod.key {
+                    *select.write() = "None".to_string();
+                } else {
+                    *select.write() = prod.key.clone();
+                }
+            }>
                 <div class="prod_row">
                     <p>{prod.name}</p>
                     <p>{prod.stock}</p>
@@ -22,17 +38,29 @@ pub fn ProductRow(prod: Product) -> impl IntoView {
                     // need buttons... 
                 </div>
             </A>
-            <Outlet/>
+            // if selected ?
+            <Show
+                when=move || {selected.read().expect("Some string?").to_string() == prod.key}
+                fallback= || view! {}
+            >
+                <Outlet/>
+            </Show>
         </li>
     }
 }
 
 #[component]
 pub fn ProductsContainer(prods: Vec<Product>) -> impl IntoView { //(create button, list of prods...)
-    
+    // let params = use_params::<ProductParam>();
+    let params = use_params_map();
+    let id = move || params.read().get("id");
+
+    let (selection, set_selection) = signal(id().unwrap_or("None".to_string()));
+    provide_context(selection);
+
     let prod_rows = prods.into_iter().map(|p| {
         view!{
-            <ProductRow prod=p />
+            <ProductRow prod=p select=set_selection />
         }
     }).collect_view();
 
@@ -84,5 +112,12 @@ pub fn Products() -> impl IntoView {
 
     view! {
         <ProductsContainer prods=prods />
+    }
+}
+
+#[component]
+pub fn ProductExpanded() -> impl IntoView{
+    view!{
+        <h1>"Placeholder description"</h1>
     }
 }

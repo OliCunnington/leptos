@@ -1,7 +1,7 @@
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 use leptos_tutorial::*;
-use leptos_router::components::{Router, Route, Routes};
+use leptos_router::components::{Router, Route, Routes, ParentRoute};
 use leptos_router::path;
 
 mod building_ui;
@@ -40,7 +40,10 @@ fn App() -> impl IntoView {
                     <Route path=path!("/projecting_children") view=ProjectingChildren />
                     <Route path=path!("/global_state_management") view=GlobalStateManagement />
                     <Route path=path!("/routing") view=Routing />
-                    <Route path=path!("/crud") view=crud::products::Products />
+                    <ParentRoute path=path!("/crud") view=crud::products::Products>
+                        <Route path=path!(":id") view=crud::products::ProductExpanded />
+                        <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
+                    </ParentRoute>
                     <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
