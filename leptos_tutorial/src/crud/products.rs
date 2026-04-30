@@ -24,13 +24,15 @@ pub fn ProductRow(prod: Product, select: WriteSignal<String>) -> impl IntoView {
 
     view!{
         <li>
-            <A href={prod.key.clone()} on:click= move |_| {
-                if selected.read().expect("Some string?").to_string() == prod.key {
-                    *select.write() = "None".to_string();
-                } else {
-                    *select.write() = prod.key.clone();
-                }
-            }>
+            <A href={prod.key.clone()} 
+                // on:click= move |_| {
+                // if selected.read().expect("Some string?").to_string() == prod.key {
+                //     *select.write() = "None".to_string();
+                // } else {
+                //     *select.write() = prod.key.clone();
+                // }
+                //}
+                >
                 <div class="prod_row">
                     <p>{prod.name}</p>
                     <p>{prod.stock}</p>
