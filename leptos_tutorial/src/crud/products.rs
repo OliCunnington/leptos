@@ -4,6 +4,7 @@ use leptos_router::components::{Outlet, A};
 use leptos_router::params::Params;
 use leptos_router::hooks::use_params_map;
 
+#[derive(Clone)]
 struct Product {
     key: String,
     name: String,
@@ -42,7 +43,7 @@ pub fn ProductRow(prod: Product, select: WriteSignal<String>) -> impl IntoView {
             </A>
             // if selected ?
             <Show
-                when=move || {selected.read().expect("Some string?").to_string() == prod.key}
+                when=move || { selected.read().expect("Some string?").to_string() == prod.key }
                 fallback= || view! {}
             >
                 <Outlet/>
@@ -69,6 +70,7 @@ pub fn ProductsContainer(prods: Vec<Product>) -> impl IntoView { //(create butto
     view!{
         // needs a "wrapper" box for sorting, create button
         <div class="prod_wrapper">
+        <h2>"Collected view"</h2>
         </div>
         <ul class="prod_rows">
             {prod_rows}
@@ -113,7 +115,9 @@ pub fn Products() -> impl IntoView {
     ];
 
     view! {
-        <ProductsContainer prods=prods />
+        <ProductsContainer prods=prods.clone() />
+        <br />
+        <ProductsContainerFor prods=prods />
     }
 }
 
@@ -121,5 +125,59 @@ pub fn Products() -> impl IntoView {
 pub fn ProductExpanded() -> impl IntoView{
     view!{
         <h1>"Placeholder description"</h1>
+    }
+}
+
+#[component]
+pub fn ProductsContainerFor(prods: Vec<Product>) -> impl IntoView {
+    let params = use_params_map();
+    let id = move || params.read().get("id");
+
+    let (selection, set_selection) = signal(id().unwrap_or("None".to_string()));
+
+    view!{
+        <div class="prod_wrapper">
+        <h2>"For"</h2>
+        </div>
+        <ul class="prod_rows">
+            <For
+                each=move || prods.clone()
+                key=|prod| prod.key.clone()
+                let(child)
+            >
+                <ProductRowAlt prod=child />
+            </For>
+        </ul>
+    }
+}
+
+#[component]
+pub fn ProductRowAlt(prod: Product) -> impl IntoView {
+
+    let params = use_params_map();
+    let id = move || params.read().get("id");
+    let key = prod.key.clone();
+
+    view!{
+        <li>
+            <A href={key
+                // move || match id().unwrap_or_default() {
+                //     key => "..".to_string(),
+                //     _   => key.clone()
+                // }
+            }>
+                <div class="prod_row">
+                    <p>{prod.name}</p>
+                    <p>{prod.stock}</p>
+                    <p>{prod.supplier}</p>
+                </div>
+            </A>
+            <Show
+                when=move || { id().unwrap_or_default() == prod.key }
+                fallback= || view! {}
+            >
+                <Outlet/>
+            </Show>
+        </li>
     }
 }

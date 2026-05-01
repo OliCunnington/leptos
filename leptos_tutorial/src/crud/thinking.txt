@@ -5,3 +5,16 @@ create, read, update, delete
 
 create-> modal 
 delete-> confirm
+
+
+Outlet...
+    if i check the url... can I
+        let is_this = move |key| params.read().get("id").unwrap_or_default() == key
+
+        ???
+        ...
+        when=move || is_this(prod.key) // .clone() ? & -> *
+        ...
+
+    also... change href to / from /:id ? or need like href=".."
+    "collapsible"
