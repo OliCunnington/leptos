@@ -18,3 +18,11 @@ Outlet...
 
     also... change href to / from /:id ? or need like href=".."
     "collapsible"
+
+
+whut the hecking?
+    key seems to always match id().unwrap_or_default() (?)
+        why is nothing matching something?
+        what the match ? -> if {} else {} works...
+
+

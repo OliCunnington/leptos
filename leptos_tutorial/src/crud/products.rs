@@ -86,6 +86,7 @@ pub fn ProductsContainer(prods: Vec<Product>) -> impl IntoView { //(create butto
     }
 }
 
+#[component]
 pub fn Products() -> impl IntoView {
     let prods = vec![
         Product {
@@ -157,14 +158,16 @@ pub fn ProductRowAlt(prod: Product) -> impl IntoView {
     let params = use_params_map();
     let id = move || params.read().get("id");
     let key = prod.key.clone();
+    let val = prod.key.clone();
 
     view!{
         <li>
-            <A href={key
-                // move || match id().unwrap_or_default() {
-                //     key => "..".to_string(),
-                //     _   => key.clone()
-                // }
+            <A href={move || 
+                if id().unwrap_or_default() == key {
+                    val.clone() + "/.."
+                } else {
+                    val.clone()
+                }
             }>
                 <div class="prod_row">
                     <p>{prod.name}</p>

@@ -1,6 +1,6 @@
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
-use leptos_tutorial::*;
+// use leptos_tutorial::*;
 use leptos_router::components::{Router, Route, Routes, ParentRoute};
 use leptos_router::path;
 
