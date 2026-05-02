@@ -26,13 +26,6 @@ pub fn ProductRow(prod: Product, select: WriteSignal<String>) -> impl IntoView {
     view!{
         <li>
             <A href={prod.key.clone()} 
-                // on:click= move |_| {
-                // if selected.read().expect("Some string?").to_string() == prod.key {
-                //     *select.write() = "None".to_string();
-                // } else {
-                //     *select.write() = prod.key.clone();
-                // }
-                //}
                 >
                 <div class="prod_row">
                     <p>{prod.name}</p>
@@ -41,7 +34,6 @@ pub fn ProductRow(prod: Product, select: WriteSignal<String>) -> impl IntoView {
                     // need buttons... 
                 </div>
             </A>
-            // if selected ?
             <Show
                 when=move || { selected.read().expect("Some string?").to_string() == prod.key }
                 fallback= || view! {}
@@ -54,7 +46,6 @@ pub fn ProductRow(prod: Product, select: WriteSignal<String>) -> impl IntoView {
 
 #[component]
 pub fn ProductsContainer(prods: Vec<Product>) -> impl IntoView { //(create button, list of prods...)
-    // let params = use_params::<ProductParam>();
     let params = use_params_map();
     let id = move || params.read().get("id");
 
@@ -68,20 +59,11 @@ pub fn ProductsContainer(prods: Vec<Product>) -> impl IntoView { //(create butto
     }).collect_view();
 
     view!{
-        // needs a "wrapper" box for sorting, create button
         <div class="prod_wrapper">
         <h2>"Collected view"</h2>
         </div>
         <ul class="prod_rows">
             {prod_rows}
-        // <For
-        //     each=move || prods.get()
-        //     key=|counter| counter.0
-        //     children=move |(id, count)| {
-
-        //     }
-        // />
-
         </ul>
     }
 }
@@ -125,7 +107,7 @@ pub fn Products() -> impl IntoView {
 #[component]
 pub fn ProductExpanded() -> impl IntoView{
     view!{
-        <h1>"Placeholder description"</h1>
+        <h1>"Placeholder description for "{use_params_map().read().get("id")}</h1>
     }
 }
 
