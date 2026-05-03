@@ -3,6 +3,9 @@ use leptos::Params;
 use leptos_router::components::{Outlet, A};
 use leptos_router::params::Params;
 use leptos_router::hooks::use_params_map;
+use crate::crud::db_async;
+
+// pub mod crud;
 
 #[derive(Clone)]
 struct Product {
@@ -113,24 +116,27 @@ pub fn ProductExpanded() -> impl IntoView{
 
 #[component]
 pub fn ProductsContainerFor(prods: Vec<Product>) -> impl IntoView {
-    let params = use_params_map();
-    let id = move || params.read().get("id");
 
-    let (selection, set_selection) = signal(id().unwrap_or("None".to_string()));
+    let p = db_async::get_products();
 
     view!{
         <div class="prod_wrapper">
-        <h2>"For"</h2>
+            <h2>"For"</h2>
+            <p>"some buttons..."</p>
         </div>
-        <ul class="prod_rows">
-            <For
-                each=move || prods.clone()
-                key=|prod| prod.key.clone()
-                let(child)
-            >
-                <ProductRowAlt prod=child />
-            </For>
-        </ul>
+        <Suspense
+            fallback=move || view! { <p>"Loading..."</p> }
+        >
+            <ul class="prod_rows">
+                <For
+                    each=move || prods.clone()
+                    key=|prod| prod.key.clone()
+                    let(child)
+                >
+                    <ProductRowAlt prod=child />
+                </For>
+            </ul>
+        </Suspense>
     }
 }
 
