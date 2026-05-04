@@ -103,21 +103,35 @@ pub fn Products() -> impl IntoView {
     view! {
         <ProductsContainer prods=prods.clone() />
         <br />
-        <ProductsContainerFor prods=prods />
+        <ProductsContainerFor/> // prods=prods />
     }
 }
 
 #[component]
 pub fn ProductExpanded() -> impl IntoView{
+    let id = use_params_map().read().get("id");
+    let p = LocalResource::new(move || db_async::get_product(id));
+
     view!{
-        <h1>"Placeholder description for "{use_params_map().read().get("id")}</h1>
+        <h1>"Placeholder description for "{id}</h1>
+        <Suspense
+            fallback=move || view! { <p>"Loading..."</p> }
+        >
+            {move || {
+                p.get()
+                    .map(|p| view! { 
+                        <p>{p.unwrap().description}</p> 
+                        <p>{p.unwrap().price}</p>
+                    })
+            }}
+        </Suspense>
     }
 }
 
 #[component]
-pub fn ProductsContainerFor(prods: Vec<Product>) -> impl IntoView {
+pub fn ProductsContainerFor() -> impl IntoView {
 
-    let p = db_async::get_products();
+    let p = LocalResource::new(move || db_async::get_products());
 
     view!{
         <div class="prod_wrapper">
@@ -129,8 +143,8 @@ pub fn ProductsContainerFor(prods: Vec<Product>) -> impl IntoView {
         >
             <ul class="prod_rows">
                 <For
-                    each=move || prods.clone()
-                    key=|prod| prod.key.clone()
+                    each=move || p.get().clone()
+                    key=|prod| prod.get().key.clone()
                     let(child)
                 >
                     <ProductRowAlt prod=child />
