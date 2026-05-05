@@ -1,5 +1,7 @@
 use leptos::prelude::*;
 use leptos::Params;
+use leptos::task::spawn_local;
+use leptos::html;
 use leptos_router::components::{Outlet, A};
 use leptos_router::params::Params;
 use leptos_router::hooks::use_params_map;
@@ -110,18 +112,19 @@ pub fn Products() -> impl IntoView {
 #[component]
 pub fn ProductExpanded() -> impl IntoView{
     let id = use_params_map().read().get("id");
-    let p = LocalResource::new(move || db_async::get_product(id));
+    let p = LocalResource::new(move || db_async::get_product(id.as_ref().expect("some string").to_string()));
 
     view!{
-        <h1>"Placeholder description for "{id}</h1>
         <Suspense
             fallback=move || view! { <p>"Loading..."</p> }
         >
             {move || {
                 p.get()
                     .map(|p| view! { 
-                        <p>{p.unwrap().description}</p> 
+                        <p>{p.clone().unwrap().description}</p> 
                         <p>{p.unwrap().price}</p>
+                        <button>"Edit"</button>
+                        <button>"Update stock"</button>
                     })
             }}
         </Suspense>
@@ -131,20 +134,31 @@ pub fn ProductExpanded() -> impl IntoView{
 #[component]
 pub fn ProductsContainerFor() -> impl IntoView {
 
-    let p = LocalResource::new(move || db_async::get_products());
+    let (items, set_items) = signal(Vec::new());
+    create_effect(move |_| {
+        spawn_local(async move {
+            let fetched = db_async::get_products().await;
+            set_items.update(|list| *list = fetched);
+        });
+    });
+    let dialog_ref : NodeRef<html::Dialog> = create_node_ref();
 
     view!{
         <div class="prod_wrapper">
             <h2>"For"</h2>
-            <p>"some buttons..."</p>
+            <p>"NAME | STOCK | SUPPLIER"</p>
+            <button
+                on:click=move |_| { dialog_ref.get().unwrap().show_modal(); }
+            >"+"</button>
         </div>
+        <AddProductDialog dialog_ref=dialog_ref />
         <Suspense
             fallback=move || view! { <p>"Loading..."</p> }
         >
             <ul class="prod_rows">
                 <For
-                    each=move || p.get().clone()
-                    key=|prod| prod.get().key.clone()
+                    each=move || items.get()
+                    key=|prod| prod.key.clone()
                     let(child)
                 >
                     <ProductRowAlt prod=child />
@@ -155,7 +169,7 @@ pub fn ProductsContainerFor() -> impl IntoView {
 }
 
 #[component]
-pub fn ProductRowAlt(prod: Product) -> impl IntoView {
+pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
 
     let params = use_params_map();
     let id = move || params.read().get("id");
@@ -184,5 +198,22 @@ pub fn ProductRowAlt(prod: Product) -> impl IntoView {
                 <Outlet/>
             </Show>
         </li>
+    }
+}
+
+#[component]
+fn AddProductDialog(
+    dialog_ref: NodeRef<html::Dialog>
+) -> impl IntoView {
+    view!{
+        <dialog node_ref=dialog_ref class="modal">
+            <form>
+                <input
+                    name="name"
+                    type="text"
+                    placeholder="Name"
+                />
+            </form>
+        </dialog>
     }
 }

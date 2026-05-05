@@ -3,7 +3,8 @@ use leptos::{html::Input, prelude::*};
 use uuid::Uuid;
 
 // Action::new() takes an async function with a single argument
-// The input is always a single type. If you want to pass in multiple arguments, you can do it with a struct or tuple.
+// The input is always a single type. If you want to pass in multiple arguments,
+// you can do it with a struct or tuple.
 
 // // if there's a single argument, just use that
 // let action1 = Action::new(|input: &String| {
