@@ -208,11 +208,66 @@ fn AddProductDialog(
     view!{
         <dialog node_ref=dialog_ref class="modal">
             <form>
-                <input
-                    name="name"
-                    type="text"
-                    placeholder="Name"
-                />
+                <label for="key">"Key: "
+                    <input
+                        name="key"
+                        id="key"
+                        type="text"
+                        placeholder="Key"
+                    />
+                </label>
+                <label for="name">"Name: "
+                    <input
+                        name="name"
+                        id="name"
+                        type="text"
+                        placeholder="Name"
+                    />
+                </label>
+                <label for="desc">"Description: "
+                    <textarea
+                        name="desc"
+                        id="desc"
+                        type="text"
+                        placeholder="Description"
+                    />
+                </label>
+                <label for="price">"Price: "
+                    <input
+                        name="price"
+                        id="price"
+                        type="number"
+                        placeholder="Price"
+                    />
+                </label>
+                <label for="stock">"Stock: "
+                    <input
+                        name="stock"
+                        id="stock"
+                        type="number"
+                        placeholder="Stock"
+                    />
+                </label>
+                <label for="supplier">"Supplier: "
+                    <input
+                        name="supplier"
+                        id="supplier"
+                        type="text"
+                        placeholder="Supplier"
+                    />
+                </label>
+                <div>
+                    <input type="submit" on:click=move |ev| {
+                        ev.prevent_default();
+                        // TODO get vals and add product
+                        dialog_ref.get().unwrap().close();
+                    } value="Submit" />
+                    <input type="reset" value="Reset" />
+                    <button on:click=move |ev| {
+                        ev.prevent_default();
+                        dialog_ref.get().unwrap().close();
+                    }>"Cancel"</button>
+                </div>
             </form>
         </dialog>
     }
