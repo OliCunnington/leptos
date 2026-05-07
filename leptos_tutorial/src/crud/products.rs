@@ -2,6 +2,7 @@ use leptos::prelude::*;
 use leptos::Params;
 use leptos::task::spawn_local;
 use leptos::html;
+use leptos::logging::log;
 use leptos_router::components::{Outlet, A};
 use leptos_router::params::Params;
 use leptos_router::hooks::use_params_map;
@@ -205,11 +206,18 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
 fn AddProductDialog(
     dialog_ref: NodeRef<html::Dialog>
 ) -> impl IntoView {
+    let key_ref: NodeRef<html::Input> = NodeRef::new();
+    let name_ref: NodeRef<html::Input> = NodeRef::new();
+    let desc_ref: NodeRef<html::Textarea> = NodeRef::new();
+    let price_ref: NodeRef<html::Input> = NodeRef::new();
+    let stock_ref: NodeRef<html::Input> = NodeRef::new();
+    let supplier_ref: NodeRef<html::Input> = NodeRef::new();
     view!{
         <dialog node_ref=dialog_ref class="modal">
             <form>
                 <label for="key">"Key: "
                     <input
+                        node_ref=key_ref
                         name="key"
                         id="key"
                         type="text"
@@ -218,6 +226,7 @@ fn AddProductDialog(
                 </label>
                 <label for="name">"Name: "
                     <input
+                        node_ref=name_ref
                         name="name"
                         id="name"
                         type="text"
@@ -226,14 +235,15 @@ fn AddProductDialog(
                 </label>
                 <label for="desc">"Description: "
                     <textarea
+                        node_ref=desc_ref
                         name="desc"
                         id="desc"
-                        type="text"
                         placeholder="Description"
                     />
                 </label>
                 <label for="price">"Price: "
                     <input
+                        node_ref=price_ref
                         name="price"
                         id="price"
                         type="number"
@@ -242,6 +252,7 @@ fn AddProductDialog(
                 </label>
                 <label for="stock">"Stock: "
                     <input
+                        node_ref=stock_ref
                         name="stock"
                         id="stock"
                         type="number"
@@ -250,6 +261,7 @@ fn AddProductDialog(
                 </label>
                 <label for="supplier">"Supplier: "
                     <input
+                        node_ref=supplier_ref
                         name="supplier"
                         id="supplier"
                         type="text"
@@ -260,6 +272,33 @@ fn AddProductDialog(
                     <input type="submit" on:click=move |ev| {
                         ev.prevent_default();
                         // TODO get vals and add product
+                        let p = match price_ref.get().expect("expected price").value().parse::<f32>() {
+                            Ok(n) => n,
+                            Err(e) => 0.0
+                        };
+                        let s = match stock_ref.get().expect("expected stock").value().parse::<i32>() {
+                            Ok(n) => n,
+                            Err(e) => 0
+                        };
+                        let prod = db_async::Product{
+                            key: key_ref.get().expect("expected key").value(),
+                            name: name_ref.get().expect("expected name").value(),
+                            description: desc_ref.get().expect("expected desc").value(),
+                            price: p,
+                            stock: s,
+                            supplier: supplier_ref.get().expect("expected supplier").value()
+                        };
+
+                        log!("PROD log: {:?}", prod);
+
+                        async move {
+                            // what in the world is happening in here?
+                            db_async::add_product(prod).await;
+                            let prods = db_async::get_products().await;
+                            log!("PRODS log: {:?}", prods);
+
+                        };
+                        
                         dialog_ref.get().unwrap().close();
                     } value="Submit" />
                     <input type="reset" value="Reset" />
