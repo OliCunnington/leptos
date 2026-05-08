@@ -43,4 +43,8 @@ need to init that static list...
         - hmmmmmmmmmmmmm
 
         - log! no fire...
+
+        - Action::new()
+        - ok... seems to add but then the refresh kills it off... ?
     
+        - ctrl f5

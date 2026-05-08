@@ -136,14 +136,15 @@ pub fn ProductExpanded() -> impl IntoView{
 pub fn ProductsContainerFor() -> impl IntoView {
 
     let (items, set_items) = signal(Vec::new());
+    let dialog_ref : NodeRef<html::Dialog> = create_node_ref();
+
     create_effect(move |_| {
         spawn_local(async move {
             let fetched = db_async::get_products().await;
             set_items.update(|list| *list = fetched);
         });
     });
-    let dialog_ref : NodeRef<html::Dialog> = create_node_ref();
-
+    
     view!{
         <div class="prod_wrapper">
             <h2>"For"</h2>
@@ -212,10 +213,17 @@ fn AddProductDialog(
     let price_ref: NodeRef<html::Input> = NodeRef::new();
     let stock_ref: NodeRef<html::Input> = NodeRef::new();
     let supplier_ref: NodeRef<html::Input> = NodeRef::new();
+
+    let add_prod = Action::new(|input: &db_async::Product| {
+        let input= input.to_owned();
+        async move { db_async::add_product(input).await }
+    });
+
     view!{
         <dialog node_ref=dialog_ref class="modal">
             <form>
-                <label for="key">"Key: "
+                <label for="key">
+                    "Key: "
                     <input
                         node_ref=key_ref
                         name="key"
@@ -224,7 +232,8 @@ fn AddProductDialog(
                         placeholder="Key"
                     />
                 </label>
-                <label for="name">"Name: "
+                <label for="name">
+                    "Name: "
                     <input
                         node_ref=name_ref
                         name="name"
@@ -233,7 +242,8 @@ fn AddProductDialog(
                         placeholder="Name"
                     />
                 </label>
-                <label for="desc">"Description: "
+                <label for="desc">
+                    "Description: "
                     <textarea
                         node_ref=desc_ref
                         name="desc"
@@ -241,7 +251,8 @@ fn AddProductDialog(
                         placeholder="Description"
                     />
                 </label>
-                <label for="price">"Price: "
+                <label for="price">
+                    "Price: "
                     <input
                         node_ref=price_ref
                         name="price"
@@ -250,7 +261,8 @@ fn AddProductDialog(
                         placeholder="Price"
                     />
                 </label>
-                <label for="stock">"Stock: "
+                <label for="stock">
+                    "Stock: "
                     <input
                         node_ref=stock_ref
                         name="stock"
@@ -259,7 +271,8 @@ fn AddProductDialog(
                         placeholder="Stock"
                     />
                 </label>
-                <label for="supplier">"Supplier: "
+                <label for="supplier">
+                    "Supplier: "
                     <input
                         node_ref=supplier_ref
                         name="supplier"
@@ -271,7 +284,6 @@ fn AddProductDialog(
                 <div>
                     <input type="submit" on:click=move |ev| {
                         ev.prevent_default();
-                        // TODO get vals and add product
                         let p = match price_ref.get().expect("expected price").value().parse::<f32>() {
                             Ok(n) => n,
                             Err(e) => 0.0
@@ -291,13 +303,7 @@ fn AddProductDialog(
 
                         log!("PROD log: {:?}", prod);
 
-                        async move {
-                            // what in the world is happening in here?
-                            db_async::add_product(prod).await;
-                            let prods = db_async::get_products().await;
-                            log!("PRODS log: {:?}", prods);
-
-                        };
+                        add_prod.dispatch(prod);
                         
                         dialog_ref.get().unwrap().close();
                     } value="Submit" />
