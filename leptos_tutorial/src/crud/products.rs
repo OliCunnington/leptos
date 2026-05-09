@@ -135,32 +135,41 @@ pub fn ProductExpanded() -> impl IntoView{
 #[component]
 pub fn ProductsContainerFor() -> impl IntoView {
 
-    let (items, set_items) = signal(Vec::new());
+    // let (items, set_items) = signal(Vec::new());
     let dialog_ref : NodeRef<html::Dialog> = create_node_ref();
 
-    create_effect(move |_| {
-        spawn_local(async move {
-            let fetched = db_async::get_products().await;
-            set_items.update(|list| *list = fetched);
-        });
-    });
+    // create_effect(move |_| {
+    //     spawn_local(async move {
+    //         let fetched = db_async::get_products().await;
+    //         set_items.update(|list| *list = fetched);
+    //     });
+    // });
     
+    let ps = LocalResource::new(|| async {
+        db_async::get_products().await
+    });
+
     view!{
         <div class="prod_wrapper">
-            <h2>"For"</h2>
             <p>"NAME | STOCK | SUPPLIER"</p>
             <button
                 on:click=move |_| { dialog_ref.get().unwrap().show_modal(); }
             >"+"</button>
+            // <button
+            //     on:click=move |_| { ps.refetch() }
+            // >"REFRESH" </button>
         </div>
-        <AddProductDialog dialog_ref=dialog_ref />
+        <AddProductDialog dialog_ref=dialog_ref res=ps />
         <Suspense
             fallback=move || view! { <p>"Loading..."</p> }
         >
             <ul class="prod_rows">
                 <For
-                    each=move || items.get()
-                    key=|prod| prod.key.clone()
+                    // each=move || items.get()
+                    // key=|prod| prod.key.clone()
+                    // let(child)
+                    each = move || ps.get().unwrap()
+                    key = |prod| prod.key.clone()
                     let(child)
                 >
                     <ProductRowAlt prod=child />
@@ -205,7 +214,8 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
 
 #[component]
 fn AddProductDialog(
-    dialog_ref: NodeRef<html::Dialog>
+    dialog_ref: NodeRef<html::Dialog>,
+    res: LocalResource<Vec<db_async::Product>>
 ) -> impl IntoView {
     let key_ref: NodeRef<html::Input> = NodeRef::new();
     let name_ref: NodeRef<html::Input> = NodeRef::new();
@@ -305,6 +315,8 @@ fn AddProductDialog(
 
                         add_prod.dispatch(prod);
                         
+                        res.refetch();
+
                         dialog_ref.get().unwrap().close();
                     } value="Submit" />
                     <input type="reset" value="Reset" />
