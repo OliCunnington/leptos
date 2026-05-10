@@ -168,7 +168,7 @@ pub fn ProductsContainerFor() -> impl IntoView {
                     // each=move || items.get()
                     // key=|prod| prod.key.clone()
                     // let(child)
-                    each = move || ps.get().unwrap()
+                    each = move || ps.get().unwrap_or_default()
                     key = |prod| prod.key.clone()
                     let(child)
                 >
@@ -187,10 +187,19 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
     let key = prod.key.clone();
     let val = prod.key.clone();
 
+    let del_prod = Action::new(|input: &String| {
+        let input= input.to_owned();
+        async move { db_async::delete_prod(input).await }
+    });
+
+    let del_wrap = move |&s: &String| {
+        del_prod.dispatch(s.to_owned());
+    };
+
     view!{
         <li>
             <A href={move || 
-                if id().unwrap_or_default() == key {
+                if id().unwrap_or_default() == val {
                     val.clone() + "/.."
                 } else {
                     val.clone()
@@ -200,6 +209,17 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
                     <p>{prod.name}</p>
                     <p>{prod.stock}</p>
                     <p>{prod.supplier}</p>
+                    <Show
+                        when=move || { id().unwrap_or_default() == key.clone() }
+                        fallback= || view! {}
+                    >
+                        <button //on:click=move |ev| {
+                            //del_wrap(&key);
+                        //}
+                        >
+                            "DELETE"
+                        </button>
+                    </Show>
                 </div>
             </A>
             <Show

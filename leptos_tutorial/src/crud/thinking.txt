@@ -48,3 +48,35 @@ need to init that static list...
         - ok... seems to add but then the refresh kills it off... ?
     
         - ctrl f5
+
+        -- yipee... i think..
+        - oh boy... 
+            adding and refreshing seems to kill the whole app?
+            ok no, just refreshing kills it.
+
+
+leptos_tutorial-fa087f0185ec6273_bg.wasm:0x43b224 Uncaught RuntimeError: unreachable
+    at leptos_tutorial-5f535cfcc1282469.wasm.__rustc[16f1505adc47261a]::__rust_abort (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x43b224)
+    at leptos_tutorial-5f535cfcc1282469.wasm.__rustc[16f1505adc47261a]::__rust_start_panic (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x43b132)
+    at leptos_tutorial-5f535cfcc1282469.wasm.__rustc[16f1505adc47261a]::rust_panic (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x4394ec)
+    at leptos_tutorial-5f535cfcc1282469.wasm.std::panicking::panic_with_hook::h77afe0ddfda2cb89 (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x253eef)
+    at leptos_tutorial-5f535cfcc1282469.wasm.std::panicking::panic_handler::{{closure}}::hf36efc37fdd11196 (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x30f859)
+    at leptos_tutorial-5f535cfcc1282469.wasm.std::sys::backtrace::__rust_end_short_backtrace::h46ab1174c51ef229 (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x43aa71)
+    at leptos_tutorial-5f535cfcc1282469.wasm.__rustc[16f1505adc47261a]::rust_begin_unwind (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x3fc732)
+    at leptos_tutorial-5f535cfcc1282469.wasm.core::panicking::panic_fmt::h6651313c3e2c6c2f (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x3c5bca)
+    at leptos_tutorial-5f535cfcc1282469.wasm.core::panicking::panic::h0149fc8f1656305a (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x43775f)
+    at leptos_tutorial-5f535cfcc1282469.wasm.core::option::unwrap_failed::h351295eb7223eb75 (leptos_tutorial-fa087f0185ec6273_bg.wasm:0x4395d8)
+                                                           _____________
+
+ok, unwrap_or_default for the loop key fixed that.
+
+but the vec<prod> resets on refresh... 
+ should probably move to a csv or something.
+ could just change the way the vec is made...
+ i have it being created anytime the script runs...
+ - populate if empty (: :)
+
+ update and remove needed
+    - update needs to populate the modal
+    - update stock should open just a +/- and input modal
+    - delete button in the wrapper ?

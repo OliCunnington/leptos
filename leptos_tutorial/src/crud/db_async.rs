@@ -43,7 +43,7 @@ static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
 }));
 
 pub async fn get_products() -> Vec<Product> {
-    // TimeoutFuture::new(1_000).await;
+    TimeoutFuture::new(1_000).await;
     PRODS.lock().unwrap().clone()
 }
 
@@ -60,7 +60,6 @@ pub async fn get_product(key: String) -> Option<Product>{
 pub async fn add_product(p: Product) -> bool {
     // TimeoutFuture::new(1_000).await;
     PRODS.lock().unwrap().push(p);
-    //this log no fire... boo
     log!("PRODS log:  {:?}", PRODS.lock().unwrap());
     true
 }
@@ -74,6 +73,22 @@ pub async fn update_stock(key: String, s: i32) -> bool {
             // could probably take index here and then mod...
             p.stock += s;
         }
+    }
+
+    // let ps = PRODS.lock().unwrap() // ? like this?
+    // if let Some(index) = ps.iter().position(|&p| p.key == key) {
+    //      uh... i have prods locked above... 
+    //      do i just let the locked ref above?   
+    //      ps[p].stock += s //?? 
+    // }
+    true
+}
+
+pub async fn delete_prod(key: String) -> bool {
+    TimeoutFuture::new(1_000).await;
+    let mut ps = PRODS.lock().unwrap(); 
+    if let Some(i) = ps.iter().position(|p| p.key == key) {
+        ps.remove(i);
     }
     true
 }
