@@ -192,9 +192,9 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
         async move { db_async::delete_prod(input).await }
     });
 
-    let del_wrap = move |&s: &String| {
-        del_prod.dispatch(s.to_owned());
-    };
+    // let del_wrap = move || {
+    //     del_prod.dispatch(prod.key.clone());
+    // };
 
     view!{
         <li>
@@ -213,9 +213,10 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
                         when=move || { id().unwrap_or_default() == key.clone() }
                         fallback= || view! {}
                     >
-                        <button //on:click=move |ev| {
-                            //del_wrap(&key);
-                        //}
+                        <button // on:click=move |_| {
+                            // //del_wrap();
+                            //del_prod.dispatch(key.clone());
+                        // }
                         >
                             "DELETE"
                         </button>
@@ -223,7 +224,7 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
                 </div>
             </A>
             <Show
-                when=move || { id().unwrap_or_default() == prod.key }
+                when=move || { id().unwrap_or_default() == prod.key.clone() }
                 fallback= || view! {}
             >
                 <Outlet/>

@@ -80,3 +80,10 @@ but the vec<prod> resets on refresh...
     - update needs to populate the modal
     - update stock should open just a +/- and input modal
     - delete button in the wrapper ?
+
+    fuck is this fucking fuck sake shit 
+    fnOnce... persists with clone() and & attempts ?! even with remove move (kekL)
+
+    Delete function must be able to run multiple times...
+        - im missing some flag or something here ... once is fine.
+            IT WILL DELETE IT!
