@@ -68,19 +68,19 @@ pub async fn update_stock(key: String, s: i32) -> bool {
     // TODO make this modify (static yoke) in place... not clone?
     // ugh
     TimeoutFuture::new(1_000).await;
-    for mut p in PRODS.lock().unwrap().clone().into_iter() {
-        if p.key == key {
-            // could probably take index here and then mod...
-            p.stock += s;
-        }
-    }
-
-    // let mut ps = PRODS.lock().unwrap() // ? like this?
-    // if let Some(index) = ps.iter().position(|&p| p.key == key) {
-    //      uh... i have prods locked above... 
-    //      do i just let the locked ref above?   
-    //      ps[index].stock += s //?? 
+    // for mut p in PRODS.lock().unwrap().clone().into_iter() {
+    //     if p.key == key {
+    //         // could probably take index here and then mod...
+    //         p.stock += s;
+    //     }
     // }
+
+    let mut ps = PRODS.lock().unwrap(); // ? like this?
+    if let Some(index) = ps.iter().position(|p| p.key == key) {
+        //  uh... i have prods locked above... 
+        //  do i just let the locked ref above?   
+         ps[index].stock += s //?? 
+    }
     true
 }
 

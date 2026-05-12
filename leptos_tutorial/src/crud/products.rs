@@ -112,10 +112,13 @@ pub fn Products() -> impl IntoView {
 
 #[component]
 pub fn ProductExpanded() -> impl IntoView{
+    
+    let dialog_ref : NodeRef<html::Dialog> = create_node_ref();
     let id = use_params_map().read().get("id");
     let p = LocalResource::new(move || db_async::get_product(id.as_ref().expect("some string").to_string()));
 
     view!{
+        <UpdateStockDialog dialog_ref=dialog_ref res=p />
         <Suspense
             fallback=move || view! { <p>"Loading..."</p> }
         >
@@ -125,7 +128,9 @@ pub fn ProductExpanded() -> impl IntoView{
                         <p>{p.clone().unwrap().description}</p> 
                         <p>{p.unwrap().price}</p>
                         <button>"Edit"</button>
-                        <button>"Update stock"</button>
+                        <button
+                            on:click=move |_| { dialog_ref.get().unwrap().show_modal(); }
+                        >"Update stock"</button>
                     })
             }}
         </Suspense>
@@ -213,9 +218,10 @@ pub fn ProductRowAlt(prod: db_async::Product) -> impl IntoView {
                         when=move || { id().unwrap_or_default() == key.clone() }
                         fallback= || view! {}
                     >
-                        <button // on:click=move |_| {
-                            // //del_wrap();
-                            //del_prod.dispatch(key.clone());
+                        <button //on:click=move |_| {
+                            //del_wrap();
+                            // let k = key.clone();
+                        //     del_prod.dispatch(key);
                         // }
                         >
                             "DELETE"
@@ -345,6 +351,40 @@ fn AddProductDialog(
                         ev.prevent_default();
                         dialog_ref.get().unwrap().close();
                     }>"Cancel"</button>
+                </div>
+            </form>
+        </dialog>
+    }
+}
+
+#[component]
+fn UpdateStockDialog(
+    dialog_ref: NodeRef<html::Dialog>,
+    res: LocalResource<Option<db_async::Product>>
+) -> impl IntoView {
+
+    let stock_ref: NodeRef<html::Input> = NodeRef::new();
+
+    view!{
+        <dialog node_ref=dialog_ref class="modal">
+            <form>
+                <label for="stock">
+                    "Stock: "
+                    <input
+                        node_ref=stock_ref
+                        name="stock"
+                        id="stock"
+                        type="number"
+                        placeholder="Stock"
+                        value={res.get().unwrap_or_default().map(|p| p.stock)}
+                    />
+                </label>
+                <div>
+                    <input type="Submit" value="Submit"/>
+                    <button on:click=move |ev| {
+                        ev.prevent_default();
+                        dialog_ref.get().unwrap().close();
+                    }>"Cancel"</button> 
                 </div>
             </form>
         </dialog>
