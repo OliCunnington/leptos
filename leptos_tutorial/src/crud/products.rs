@@ -364,6 +364,11 @@ fn UpdateStockDialog(
 ) -> impl IntoView {
 
     let stock_ref: NodeRef<html::Input> = NodeRef::new();
+    
+    let update_stock = Action::new(|input: &(String, i32)| {
+        let (key, stock)= input.to_owned();
+        async move { db_async::update_stock(key, stock).await }
+    });
 
     view!{
         <dialog node_ref=dialog_ref class="modal">
@@ -380,7 +385,17 @@ fn UpdateStockDialog(
                     />
                 </label>
                 <div>
-                    <input type="Submit" value="Submit"/>
+                    <input type="Submit" on:click=move |ev| {
+                        ev.prevent_default();
+                        let s = match stock_ref.get().expect("expected stock").value().parse::<i32>() {
+                            Ok(n) => n,
+                            Err(e) => 0
+                        };
+                        update_stock.dispatch((res.get().unwrap_or_default().unwrap().key.clone(), s));
+                        
+                        dialog_ref.get().unwrap().close();
+                    }
+                    value="Submit"/>
                     <button on:click=move |ev| {
                         ev.prevent_default();
                         dialog_ref.get().unwrap().close();

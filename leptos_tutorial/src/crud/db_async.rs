@@ -43,7 +43,7 @@ static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
 }));
 
 pub async fn get_products() -> Vec<Product> {
-    TimeoutFuture::new(1_000).await;
+    // TimeoutFuture::new(1_000).await;
     PRODS.lock().unwrap().clone()
 }
 
@@ -67,7 +67,7 @@ pub async fn add_product(p: Product) -> bool {
 pub async fn update_stock(key: String, s: i32) -> bool {
     // TODO make this modify (static yoke) in place... not clone?
     // ugh
-    TimeoutFuture::new(1_000).await;
+    // TimeoutFuture::new(1_000).await;
     // for mut p in PRODS.lock().unwrap().clone().into_iter() {
     //     if p.key == key {
     //         // could probably take index here and then mod...
