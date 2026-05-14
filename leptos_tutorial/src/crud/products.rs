@@ -154,6 +154,8 @@ pub fn ProductsContainerFor() -> impl IntoView {
         db_async::get_products().await
     });
 
+    provide_context(ps);
+
     view!{
         <div class="prod_wrapper">
             <p>"NAME | STOCK | SUPPLIER"</p>
@@ -370,6 +372,8 @@ fn UpdateStockDialog(
         async move { db_async::update_stock(key, stock).await }
     });
 
+    let re = use_context::<LocalResource<Vec<db_async::Product>>>().expect("to have found the setter provided");
+
     view!{
         <dialog node_ref=dialog_ref class="modal">
             <form>
@@ -385,17 +389,21 @@ fn UpdateStockDialog(
                     />
                 </label>
                 <div>
-                    <input type="Submit" on:click=move |ev| {
-                        ev.prevent_default();
-                        let s = match stock_ref.get().expect("expected stock").value().parse::<i32>() {
-                            Ok(n) => n,
-                            Err(e) => 0
-                        };
-                        update_stock.dispatch((res.get().unwrap_or_default().unwrap().key.clone(), s));
-                        
-                        dialog_ref.get().unwrap().close();
-                    }
-                    value="Submit"/>
+                    <input type="Submit" value="Submit" 
+                        on:click=move |ev| {
+                            ev.prevent_default();
+                            let s = match stock_ref.get().expect("expected stock").value().parse::<i32>() {
+                                Ok(n) => n,
+                                Err(e) => 0
+                            };
+                            update_stock.dispatch((res.get().unwrap_or_default().unwrap().key.clone(), s));
+                            
+                            //does nothing for values inside of existing rows...
+                            re.refetch();
+
+                            dialog_ref.get().unwrap().close();
+                        }
+                    />
                     <button on:click=move |ev| {
                         ev.prevent_default();
                         dialog_ref.get().unwrap().close();
