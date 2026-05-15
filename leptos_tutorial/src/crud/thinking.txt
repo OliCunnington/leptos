@@ -102,4 +102,7 @@ something has happened that is making the whole list of prods reload on a click.
         - do i bind and effect to the signal that updates the actual row
         - or cheat... and like update a local signal in prods after updating the prod...
 
+        - maybe just move stock into the expanded view?
+
+        
 move prods to CSV
