@@ -19,49 +19,55 @@ pub struct Product {
 static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
     let mut v = Vec::new();
 
-    // let file = File::open("prods.csv").expect("File to exist");
-    // let reader = BufReader::new(file);
-    // for line in reader.lines() {
-    //     let l : Vec<String> = line.expect("Some string").split(",").collect::<Vec<&str>>().into_iter().map(|x: &str| x.to_owned()).collect();
-    //     v.push(Product {
-    //         key: l[0].to_string(),
-    //         name: l[1].to_string(),
-    //         description: l[2].to_string(),
-    //         price: l[3].parse::<f32>().expect("Some float"),
-    //         stock: l[4].parse::<i32>().expect("Some int"),
-    //         supplier: l[5].to_string()
-    //     });
-    // }
     
-    v.push(Product {
-        key: "aaa".to_string(),
-        name: "Apple".to_string(),
-        description: "Juicy apple".to_string(),
-        price: 0.99,
-        stock: 20,
-        supplier: "A".to_string()
-    });
-    v.push(Product {
-        key: "bbb".to_string(),
-        name: "Banana".to_string(),
-        description: "delicious banana".to_string(),
-        price: 1.99,
-        stock: 10,
-        supplier: "B".to_string()
-    });
-    v.push(Product {
-        key: "ccc".to_string(),
-        name: "Carrot".to_string(),
-        description: "crunchy carrot".to_string(),
-        price: 0.99,
-        stock: 20,
-        supplier: "C".to_string()
-    });
+    
+    // v.push(Product {
+    //     key: "aaa".to_string(),
+    //     name: "Apple".to_string(),
+    //     description: "Juicy apple".to_string(),
+    //     price: 0.99,
+    //     stock: 20,
+    //     supplier: "A".to_string()
+    // });
+    // v.push(Product {
+    //     key: "bbb".to_string(),
+    //     name: "Banana".to_string(),
+    //     description: "delicious banana".to_string(),
+    //     price: 1.99,
+    //     stock: 10,
+    //     supplier: "B".to_string()
+    // });
+    // v.push(Product {
+    //     key: "ccc".to_string(),
+    //     name: "Carrot".to_string(),
+    //     description: "crunchy carrot".to_string(),
+    //     price: 0.99,
+    //     stock: 20,
+    //     supplier: "C".to_string()
+    // });
     v
 }));
 
+fn read_file() {
+    let file = File::open("prods.csv").expect("File to exist");
+    let reader = BufReader::new(file);
+    for line in reader.lines() {
+        log!("reading line log:  {:?}", line);
+        let l : Vec<String> = line.expect("Some string").split(",").collect::<Vec<&str>>().into_iter().map(|x: &str| x.to_owned()).collect();
+        PRODS.lock().unwrap().push(Product {
+            key: l[0].to_string(),
+            name: l[1].to_string(),
+            description: l[2].to_string(),
+            price: l[3].parse::<f32>().expect("Some float"),
+            stock: l[4].parse::<i32>().expect("Some int"),
+            supplier: l[5].to_string()
+        });
+    }
+}
+
 pub async fn get_products() -> Vec<Product> {
     // TimeoutFuture::new(1_000).await;
+    if PRODS.lock().unwrap().is_empty() {read_file()};
     PRODS.lock().unwrap().clone()
 }
 
