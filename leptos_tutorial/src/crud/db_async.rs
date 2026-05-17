@@ -18,8 +18,6 @@ pub struct Product {
 
 static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
     let mut v = Vec::new();
-
-    
     
     // v.push(Product {
     //     key: "aaa".to_string(),
@@ -49,12 +47,16 @@ static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
 }));
 
 fn read_file() {
-    let file = File::open("prods.csv").expect("File to exist");
+    let file = File::open("./prods.csv").expect("File to exist");
+    log!("file opened");
     let reader = BufReader::new(file);
+    log!("reader set");
+    let mut p = PRODS.lock().unwrap();
+    log!("PRODS locked, file reading");
     for line in reader.lines() {
         log!("reading line log:  {:?}", line);
         let l : Vec<String> = line.expect("Some string").split(",").collect::<Vec<&str>>().into_iter().map(|x: &str| x.to_owned()).collect();
-        PRODS.lock().unwrap().push(Product {
+        p.push(Product {
             key: l[0].to_string(),
             name: l[1].to_string(),
             description: l[2].to_string(),
@@ -67,7 +69,10 @@ fn read_file() {
 
 pub async fn get_products() -> Vec<Product> {
     // TimeoutFuture::new(1_000).await;
-    if PRODS.lock().unwrap().is_empty() {read_file()};
+    if PRODS.lock().unwrap().is_empty() {
+        log!("PRODS empty, reading file");
+        read_file()
+    };
     PRODS.lock().unwrap().clone()
 }
 
