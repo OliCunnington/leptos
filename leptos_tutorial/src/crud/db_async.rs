@@ -1,7 +1,9 @@
 use gloo_timers::future::TimeoutFuture;
 use std::sync::{LazyLock, Mutex};
 use leptos::logging::log;
-
+use leptos::server;
+use leptos::prelude::*;
+// use leptos_server_fn_error::ServerFnError;
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 
@@ -46,7 +48,8 @@ static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
     v
 }));
 
-fn read_file() {
+#[server]
+async fn read_file() -> Result<(), ServerFnError> {
     let file = File::open("./prods.csv").expect("File to exist");
     log!("file opened");
     let reader = BufReader::new(file);
@@ -65,13 +68,14 @@ fn read_file() {
             supplier: l[5].to_string()
         });
     }
+    Ok(())
 }
 
 pub async fn get_products() -> Vec<Product> {
     // TimeoutFuture::new(1_000).await;
     if PRODS.lock().unwrap().is_empty() {
         log!("PRODS empty, reading file");
-        read_file()
+        read_file().await;
     };
     PRODS.lock().unwrap().clone()
 }
