@@ -109,3 +109,9 @@ move prods to CSV
     - im not crazy
         - leptos seems to need some extra shit to work with files
             server -> client shit i guess
+
+
+SSR
+
+    what the deal with that CSS (?)
+    
