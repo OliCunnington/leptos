@@ -1,0 +1,104 @@
+// with a cargo-leptos project, log fires on server and client
+// initial load will fire twice on server
+//  refreshing page will fire on server and client once
+
+#[component]
+pub fn App() -> impl IntoView {
+    logging::log!("where do I run?");
+    // ... whatever
+}
+
+// mis-matching between server and client code
+
+// view is empty if not compiled to wasm, client expects 3 but server sends empty
+#[component]
+pub fn App() -> impl IntoView {
+    let data = if cfg!(target_arch = "wasm32") {
+        vec![0, 1, 2]
+    } else {
+        vec![]
+    };
+    data.into_iter()
+        .map(|value| view! { <span>{value}</span> })
+        .collect_view()
+}
+
+// Invalid/edge-case HTML, and mismatches between HTML and the DOM
+
+// div cannot be in p, so browser closes p,
+// causing DOM to differ from HTML expected during hydration
+#[component]
+pub fn App() -> impl IntoView {
+    let count = RwSignal::new(0);
+
+    view! {
+        <p>
+            <div class:blue=move || count.get() == 2>
+                 "First"
+            </div>
+        </p>
+    }
+}
+
+// <tbody>
+// browsers generally insert a <tbody> into <table> if its included in html or not
+#[component]
+pub fn App() -> impl IntoView {
+    let count = RwSignal::new(0);
+
+    view! {
+        <table>
+            <tr>
+                <td class:blue=move || count.get() == 0>"First"</td>
+            </tr>
+        </table>
+    }
+}
+
+// fix
+
+#[component]
+pub fn App() -> impl IntoView {
+    let count = RwSignal::new(0);
+
+    view! {
+        <table>
+            <tbody>
+                <tr>
+                    <td class:blue=move || count.get() == 0>"First"</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+}
+
+// Not all client code can run on the server
+//  app needs to run on client and server
+//      only use libraries that can run on both
+//          reqwest for example
+//      use different libraries for client and server
+//          restrict/gate them using #[cfg] macro
+//      wrap client only code in Effect::new()
+// panics
+#[component]
+pub fn App() -> impl IntoView {
+    use gloo_storage::Storage;
+    let storage = gloo_storage::LocalStorage::raw();
+    logging::log!("{storage:?}");
+}
+
+// fix
+
+#[component]
+pub fn App() -> impl IntoView {
+    use gloo_storage::Storage;
+    Effect::new(move |_| {
+        let storage = gloo_storage::LocalStorage::raw();
+        log!("{storage:?}");
+    });
+}
+
+// Not all server code can run on the client
+//  errors about the crate mio or missing things from core
+//      mark them optional = true in your Cargo.toml 
+//      and then enable them in the ssr feature definition

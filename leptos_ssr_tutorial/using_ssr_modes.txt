@@ -1,0 +1,59 @@
+// default SSR Mode is Out-of-order
+
+<Routes fallback=|| "Not found.">
+    // We’ll load the home page with out-of-order streaming and <Suspense/>
+    <Route path=path!("") view=HomePage/>
+
+    // We'll load the posts with async rendering, so they can set
+    // the title and metadata *after* loading the data
+    <Route
+        path=path!("/post/:id")
+        view=BlogPost
+        ssr=SsrMode::Async
+    />
+</Routes>
+
+// Blocking resources can be created with Resource::new_blocking()
+
+#[component]
+pub fn BlogPost() -> impl IntoView {
+    let post_data = Resource::new_blocking(/* load blog post */);
+    let comments_data = Resource::new(/* load blog comments */);
+    view! {
+        <Suspense fallback=|| ()>
+            {move || Suspend::new(async move {
+                let data = post_data.await;
+                view! {
+                    <Title text=data.title/>
+                    <Meta name="description" content=data.excerpt/>
+                    <article>
+                        /* render the post content */
+                    </article>
+                }
+            })}
+        </Suspense>
+        <Suspense fallback=|| "Loading comments...">
+            {move || Suspend::new(async move {
+                let comments = comments_data.await;
+                todo!()
+            })}
+        </Suspense>
+    }
+}
+
+// Combined with the following route definition, SsrMode::PartiallyBlocked, 
+// the blocking resource will be fully rendered on the server side,
+// making it accessible to users who disable WebAssembly or JavaScript.
+
+<Routes fallback=|| "Not found.">
+    // We’ll load the home page with out-of-order streaming and <Suspense/>
+    <Route path=path!("") view=HomePage/>
+
+    // We'll load the posts with async rendering, so they can set
+    // the title and metadata *after* loading the data
+    <Route
+        path=path!("/post/:id")
+        view=BlogPost
+        ssr=SsrMode::PartiallyBlocked
+    />
+</Routes>
