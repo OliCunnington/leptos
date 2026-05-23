@@ -1,0 +1,118 @@
+use serde::Deserialize;
+
+#[derive(Deserialize, Debug)]
+struct MyQuery {
+    foo: String,
+}
+
+#[server]
+pub async fn axum_extract() -> Result<String, ServerFnError> {
+    use axum::{extract::Query, http::Method};
+    use leptos_axum::extract;
+
+    let (method, query): (Method, Query<MyQuery>) = extract().await?;
+
+    Ok(format!("{method:?} and {query:?}"))
+}
+
+// Axum extract function only supports extractors for which the state is ()
+//  for extractor that uses State, use extract_with_state
+
+//  requires provided state, extend LeptosOptions state using the axum
+//  FromRef pattern (provides the state as context during render and server functions with custom handlers)
+
+use axum::extract::FromRef;
+
+/// Derive FromRef to allow multiple items in state, using Axum’s
+/// SubStates pattern.
+#[derive(FromRef, Debug, Clone)]
+pub struct AppState{
+    pub leptos_options: LeptosOptions,
+    pub pool: SqlitePool
+}
+
+
+// Axum State
+//  typical pattern for dependency injection for Axum is to provide a state,
+//  leptos provides its own method (pair) via context (provide_context() and use_context::<T>())
+
+let connection_pool = /* some shared state here */;
+
+let app = Router::new()
+    .leptos_routes_with_context(
+        &leptos_options,
+        routes,
+        move || provide_context(connection_pool.clone()),
+        {
+            let leptos_options = leptos_options.clone();
+            move || shell(leptos_options.clone())
+        },
+    )
+    // etc.
+
+
+// if State is needed for some existing Axum extractor, 
+// use Axum’s FromRef and extract_with_state
+
+#[derive(FromRef, Debug, Clone)]
+pub struct MyData {
+    pub value: usize,
+    pub leptos_options: LeptosOptions,
+}
+
+let app_state = MyData {
+    value: 42,
+    leptos_options,
+};
+
+// build our application with a route
+let app = Router::new()
+    .leptos_routes_with_context(
+        &app_state,
+        routes,
+        {
+            let app_state = app_state.clone();
+            move || provide_context(app_state.clone())
+        },
+        App,
+    )
+    .fallback(file_and_error_handler)
+    .with_state(app_state);
+
+// ...
+#[server]
+pub async fn uses_state() -> Result<(), ServerFnError> {
+    let state = expect_context::<MyData>();
+    let SomeStateExtractor(data) = extract_with_state(&state).await?;
+    // todo
+}
+
+
+// Generic State
+//  when a generic state type is needed
+
+pub struct AppState<TS: ThingService> {
+    pub thing_service: Arc<TS>,
+} 
+
+// Axum pattern to use generic parameter
+/// DOES NOT WORK
+pub async fn do_thing<TS: ThingService>(
+    State(state): State<AppState<TS>>,
+) -> Result<(), ThingError> {
+    state.thing_service.do_thing()
+}
+
+// use concrete types in server function to call inner generic (workaround)
+pub async do_thing_inner<TS: ThingService>() -> Result<(), ServerFnError> {
+    let state = expect_context::<AppState<TS>>(); // Works!
+    state.thing_service.do_thing()
+}
+
+#[server]
+pub async do_thing() -> Result<(), ServerFnError> {
+    use crate::thing::service::Service as ConcreteThingService;
+    use crate::thing::some_dep::SomeDep;
+
+    do_thing_inner::<ConcreteThingService<SomeDep>>().await
+}

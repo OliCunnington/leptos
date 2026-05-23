@@ -1,0 +1,87 @@
+// using server functions
+// todo.rs
+
+#[server]
+pub async fn add_todo(title: String) -> Result<(), ServerFnError> {
+    let mut conn = db().await?;
+
+    match sqlx::query("INSERT INTO todos (title, completed) VALUES ($1, false)")
+        .bind(title)
+        .execute(&mut conn)
+        .await
+    {
+        Ok(_row) => Ok(()),
+        Err(e) => Err(ServerFnError::ServerError(e.to_string())),
+    }
+}
+
+#[component]
+pub fn BusyButton() -> impl IntoView {
+    view! {
+        <button on:click=move |_| {
+            spawn_local(async {
+                add_todo("So much to do!".to_string()).await;
+            });
+        }>
+            "Add Todo"
+        </button>
+    }
+}
+
+// all server functions are async.
+// always  -> Result<(), ServerFnError> since ServerFnError includes all variants
+//  that can be wrong during network requests
+// can be called from the client, using spawn_local to run a Future
+// args and return values nered to be serializable
+
+
+// Using custom errors
+
+// can use errors that implement FromServerFnError trait
+use leptos::prelude::*;
+use server_fn::codec::JsonEncoding;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub enum AppError {
+    ServerFnError(ServerFnErrorErr),
+    DbError(String),
+}
+
+impl FromServerFnError for AppError {
+    type Encoder = JsonEncoding;
+
+    fn from_server_fn_error(value: ServerFnErrorErr) -> Self {
+        AppError::ServerFnError(value)
+    }
+}
+
+#[server]
+pub async fn create_user(name: String, email: String) -> Result<User, AppError> {
+    // Try to create user in database
+    match insert_user_into_db(&name, &email).await {
+        Ok(user) => Ok(user),
+        Err(e) => Err(AppError::DbError(e.to_string())),
+    }
+}
+
+
+// Quirks
+
+// isize and usize can lead to errors between 32bit WASM arch and 64bit server arch
+// use fixed size types like i32 and i64 to mitigate
+
+// url encoded serde_qs (default) is highly compatible with form elements,
+// but issues can occur with optional types and enums that have tuple variants
+//      issues described here:
+//          https://github.com/leptos-rs/leptos/issues/3832
+//          https://github.com/leptos-rs/leptos/issues/4016
+//          https://github.com/leptos-rs/leptos/issues/4464
+//      workaround described here:
+//          https://docs.rs/leptos/latest/leptos/attr.server.html#named-arguments
+
+
+// create resources to call server functions that load data from server
+// reading the resources under Suspense or Transition elements to enable SSR streaming
+//  and fallback states etc.
+// create actions that call server functions to mutate data on the server
