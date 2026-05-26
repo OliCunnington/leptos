@@ -49,7 +49,7 @@ static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
 }));
 
 #[server]
-async fn read_file() -> Result<(), ServerFnError> {
+pub async fn read_file() -> Result<(), ServerFnError> {
     let file = File::open("./public/crud/prods.csv").expect("File to exist");
     log!("file opened");
     let reader = BufReader::new(file);

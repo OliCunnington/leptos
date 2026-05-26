@@ -1,0 +1,38 @@
+            SSR | hydration (preparing for CSR) | CSR
+
+Server Function (Server) 
+    SSR -> invoked as normal async fn. body executed directly, full access to reactive context when called inside a component
+    hydration -> X
+    CSR -> invoked by respoding to server function standalone endpoint, respose will be serialized result. Reactive context typically not available
+
+Server Function (Client)
+    SSR -> X
+    hydration -> Not executed (when defined inside resource typed async closures)
+    CSR -> Makes HTTP request to the server fn endoint, response body will be deserialized into the result. (fn body code is never compiled into the client)
+
+Resources (Server)
+    SSR -> async closures execute in parallel when possible, results encoded into response body inside <script>
+    hydration -> X
+    CSR -> X 
+
+Resources (Client)
+    SSR -> X
+    hydration -> Not executed
+    CSR -> async closures execute whenever required by reactive system, return and new result
+
+Local Resources (Client Only)
+    SSR -> X
+    hydration -> Not Executed (will be run once after hydration to provide initial result)
+    CSR -> async closures execute whenever required by reactive system, return and new result
+
+Suspend (Server)
+    SSR -> executed in parallel when possible, selected SsrMode can modify how and when (1) futures polled (2) ordering of stream outputs
+    hydration -> X
+    CSR -> X
+
+Suspend (Client)
+    SSR -> X
+    hydration -> futures are fully executed once more in the client as part of hydration; returned view! {} will be used to hydrate the HTML.
+    CSR -> futures are fully executed whenever required by the reactive system; returned view! {} will be used to hydrate the HTML.
+
+
