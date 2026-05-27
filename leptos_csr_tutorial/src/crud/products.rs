@@ -150,8 +150,9 @@ pub fn ProductsContainerFor() -> impl IntoView {
     //     });
     // });
     
-    let ps = LocalResource::new(|| async {
-        db_async::get_products().await
+    let ps = //LocalResource::new(|| 
+        spawn_local(async {
+        db_async::get_products().await;
     });
 
     provide_context(ps);

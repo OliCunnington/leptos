@@ -1,0 +1,27 @@
+Progressive enhancment
+    start with simple HTML 
+        add features if and when needed...
+
+Graceful degredation
+    handle failure when parts of enhanced stack are unavailable
+
+
+Defensive design
+    SSR - without ssr, apps will not work without both JS and WASM
+    Native HTML - rely on elements that provide the functionality required 
+                    eg. <a> for nav (incl #), <details> for acordion, <form> to persist info in URL
+    URL-driven state - the more state data in the url, the more the state can be rendered SSR
+                        ie. without JS/WASM
+    SsrMode::PartiallyBlocked or SsrMode::InOrder
+        - Out-of-order requires some inline JS, can fail if connection breaks partway or client does not support JS
+        - Async gives a complete HTML page, but only once all resources loaded
+        - In-order streaming shows piece by piece
+        - Partially blocked SSR build out-of-order streaming by replacing <Suspense/> fragments that read from blocking resources
+            - marginally longer initial response time, in exchange for more complete HTML response
+            - best choice for apps with clear distinction between impoirtance of content
+    leaning on <form>s 
+        - works with pure HTML by making normal HTTP requests
+        - able to manage complex POST or GET requests in easily-enhanced way
+    
+
+    

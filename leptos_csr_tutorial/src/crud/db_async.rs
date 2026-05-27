@@ -48,6 +48,8 @@ static PRODS : LazyLock<Mutex<Vec<Product>>> = LazyLock::new(|| Mutex::new({
     v
 }));
 
+
+// method not allowed??? is this trunk --serve vs cargo watch whatevers?
 #[server]
 pub async fn read_file() -> Result<(), ServerFnError> {
     let file = File::open("./public/crud/prods.csv").expect("File to exist");
