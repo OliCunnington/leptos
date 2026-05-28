@@ -41,6 +41,13 @@ pub fn App() -> impl IntoView {
             <main>
                 <Routes fallback=|| "Page not found.".into_view()>
                     <Route path=StaticSegment("") view=HomePage/>
+                    <Route path=path!("/actionform") view=HomePage/>
+                    <Route path=path!("/async_closures") view=HomePage/>
+                    <Route path=path!("/extractors") view=HomePage/>
+                    <Route path=path!("/hydration_bugs") view=HomePage/>
+                    <Route path=path!("/progressive_enhancment") view=HomePage/>
+                    <Route path=path!("/ssr_modes") view=HomePage/>
+                    <Route path=path!("/server_functions") view=HomePage/>
                 </Routes>
             </main>
         </Router>
