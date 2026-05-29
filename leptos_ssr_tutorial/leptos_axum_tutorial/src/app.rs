@@ -3,6 +3,7 @@ use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
     components::{Route, Router, Routes},
     StaticSegment,
+    path
 };
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
@@ -38,6 +39,16 @@ pub fn App() -> impl IntoView {
 
         // content for this welcome page
         <Router>
+            <nav>
+                <a href="">"Home"</a>
+                <a href="/actionform">"Actionform"</a>
+                <a href="/async_closures">"Async Closures Reference sheet"</a>
+                <a href="/extractors">"Extractors"</a>
+                <a href="/hydration_bugs">"Common Hydration Bugs"</a>
+                <a href="/progressive_enhancment">"Progressive enhancment and Graceful Degredation"</a>
+                <a href="/ssr_modes">"SSR Modes"</a>
+                <a href="/server_functions">"Server Functions"</a>
+            </nav>
             <main>
                 <Routes fallback=|| "Page not found.".into_view()>
                     <Route path=StaticSegment("") view=HomePage/>
