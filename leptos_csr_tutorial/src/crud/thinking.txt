@@ -115,3 +115,16 @@ SSR
 
     what the deal with that CSS (?)
     
+ok, to demo the code in tutorial, I need to do the TODO 
+    blog posts
+        - the page      // view=BlogPost
+        - to post       // Resource::new_blocking(/* load blog post */);
+    blog comments       
+        - the comment   // Resource::new(/* load blog comments */);
+        - the component // {move || Suspend::new(async move {
+                        //   let comments = comments_data.await;
+                        //   todo!()
+                        // })}
+
+blocking / PartiallyBlocked seems to be a pair
+    like the resource loads as new_blocking, then the route defines it as PartiallyBlocked
