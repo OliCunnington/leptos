@@ -125,6 +125,13 @@ ok, to demo the code in tutorial, I need to do the TODO
                         //   let comments = comments_data.await;
                         //   todo!()
                         // })}
+    
+    the comments needs to be a seperate comp, not in an outlet... since then the post would load it all
+    blogpost {
+        post: String
+        comments: Vec<String>
+    }
 
+    
 blocking / PartiallyBlocked seems to be a pair
     like the resource loads as new_blocking, then the route defines it as PartiallyBlocked

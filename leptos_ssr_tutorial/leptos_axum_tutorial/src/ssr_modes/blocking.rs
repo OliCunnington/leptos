@@ -1,3 +1,5 @@
+use leptos::prelude::*;
+
 #[component]
 pub fn BlogPost() -> impl IntoView {
     let post_data = Resource::new_blocking(/* load blog post */);
