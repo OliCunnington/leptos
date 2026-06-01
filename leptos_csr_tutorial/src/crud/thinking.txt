@@ -132,6 +132,11 @@ ok, to demo the code in tutorial, I need to do the TODO
         comments: Vec<String>
     }
 
+    wait...
+    i think the blog_post part just need the chunk responsible for loading the 
+    or create/fetching the resource...
+    blocking section already provides a basic template/layout/component
+
     
 blocking / PartiallyBlocked seems to be a pair
     like the resource loads as new_blocking, then the route defines it as PartiallyBlocked
