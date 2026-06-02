@@ -1,9 +1,11 @@
 use leptos::prelude::*;
+use gloo_timers::future::TimeoutFuture;
+use std::sync::{LazyLock, Mutex};
 
-pub struct Post {
-    post: PostContent,
-    comments: Vec<Comment>
-}
+// pub struct Post {
+//     post: PostContent,
+//     comments: Vec<Comment>
+// }
 
 #[derive(Deserialize, Serialize)]
 pub struct PostContent {
@@ -42,3 +44,46 @@ pub fn BlogPostComment(comment : Comment) -> impl IntoView {
     // let post_data = Resource::new_blocking(/* load blog post */);
     // let comments_data = Resource::new(/* load blog comments */);
 // deez...
+
+static BLOGPOSTS : LazyLock<Mutex<Vec<PostContent>>> = LazyLock::new(|| Mutex::new({
+    let mut v = Vec::new();
+    v.push(PostContent{
+        user: "A".to_string(),
+        post_data: "Post 1".to_string()
+    })
+    v.push(PostContent{
+        user: "B".to_string(),
+        post_data: "Post 2".to_string()
+    })
+    v.push(PostContent{
+        user: "C".to_string(),
+        post_data: "Post 3".to_string()
+    })
+    v
+}));
+
+static COMMENTS : LazyLock<Mutex<Vec<Comment>>> = LazyLock::new(|| Mutex::new({
+    let mut v = Vec::new();
+    v.push(Comment{
+        user: "A".to_string(),
+        comment: "Comment 1".to_string()
+    })
+    v.push(Comment{
+        user: "B".to_string(),
+        comment: "Comment 2".to_string()
+    })
+    v.push(Comment{
+        user: "C".to_string(),
+        comment: "Comment 3".to_string()
+    })
+    v
+}));
+
+pub async fn get_posts() -> Result<Vec<PostContent>, ServerFnError> {
+    // add random/optional delay?
+    Result(BLOGPOSTS.lock().unwrap().clone())
+}
+
+pub async fn get_comments() -> Result<Vec<Comment>, ServerFnError> {
+    Result(COMMENTS.lock().unwrap().clone())
+}

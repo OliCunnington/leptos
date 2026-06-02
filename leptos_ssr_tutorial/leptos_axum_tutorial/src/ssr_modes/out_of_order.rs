@@ -1,3 +1,5 @@
+use leptos::prelude::*;
+
 // <Routes fallback=|| "Not found.">
 //     // We’ll load the home page with out-of-order streaming and <Suspense/>
 //     <Route path=path!("") view=HomePage/>
