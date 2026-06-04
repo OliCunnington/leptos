@@ -1,5 +1,13 @@
 use leptos::prelude::*;
 
+#[component]
+pub fn OutOfOrderStreaming() {
+    view!{
+        <div>
+            
+        </div>
+    }
+}
 // <Routes fallback=|| "Not found.">
 //     // We’ll load the home page with out-of-order streaming and <Suspense/>
 //     <Route path=path!("") view=HomePage/>
