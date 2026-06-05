@@ -7,6 +7,11 @@ use std::sync::{LazyLock, Mutex};
 //     comments: Vec<Comment>
 // }
 
+pub fn wait_for(i: i32) -> () {
+    TimeoutFuture::new(i).await;
+    ()
+}
+
 #[derive(Deserialize, Serialize)]
 pub struct PostContent {
     user: String,
