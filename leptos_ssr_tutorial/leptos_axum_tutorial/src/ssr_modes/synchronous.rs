@@ -4,7 +4,6 @@ use leptos::prelude::*;
 pub fn SynchronousRendering() {
     view!{
         <div>
-            
         </div>
     }
 }
