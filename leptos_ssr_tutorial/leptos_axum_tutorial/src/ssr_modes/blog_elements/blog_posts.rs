@@ -90,19 +90,19 @@ static COMMENTS : LazyLock<Mutex<Vec<Comment>>> = LazyLock::new(|| Mutex::new({
 
 pub async fn get_posts() -> Result<Vec<PostContent>, ServerFnError> {
     // add random/optional delay?
-    Result(BLOGPOSTS.lock().unwrap().clone())
+    Ok(BLOGPOSTS.lock().unwrap().clone())
 }
 
 pub async fn get_post(index: i32) -> Result<PostContent, ServerFnError> {
     // add random/optional delay?
-    Result(BLOGPOSTS.lock().unwrap().clone()[index])
+    Ok(BLOGPOSTS.lock().unwrap().clone()[index])
 }
 
 pub async fn get_comments() -> Result<Vec<Comment>, ServerFnError> {
-    Result(COMMENTS.lock().unwrap().clone())
+    Ok(COMMENTS.lock().unwrap().clone())
 }
 
 pub async fn get_comment(index: i32) -> Result<Comment, ServerFnError> {
     // add random/optional delay?
-    Result(COMMENTS.lock().unwrap().clone()[index])
+    Ok(COMMENTS.lock().unwrap().clone()[index])
 }
