@@ -140,3 +140,8 @@ ok, to demo the code in tutorial, I need to do the TODO
     
 blocking / PartiallyBlocked seems to be a pair
     like the resource loads as new_blocking, then the route defines it as PartiallyBlocked
+
+
+scope... where do I get one?
+
+Scope::new() ?!
