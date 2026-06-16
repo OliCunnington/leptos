@@ -145,3 +145,17 @@ blocking / PartiallyBlocked seems to be a pair
 scope... where do I get one?
 
 Scope::new() ?!
+
+Do I just use this on all of them? with a loop for loading resource etc...
+view!{
+        <div>
+            <h2>"Posts"</h2>
+            <Suspense fallback=|| (view!{<p>"Loading..."</p>})>
+                
+            </Suspense>
+            <h2>"Comments"</h2>
+            <Suspense fallback=|| (view!{<p>"Loading..."</p>})>
+
+            </Suspense>
+        </div>
+    }
