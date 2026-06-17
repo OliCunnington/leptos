@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use leptos_meta::{Meta, Title};
 
 #[component]
 pub fn BlogPost() -> impl IntoView {
@@ -20,7 +21,7 @@ pub fn BlogPost() -> impl IntoView {
         <Suspense fallback=|| "Loading comments...">
             {move || Suspend::new(async move {
                 let comments = comments_data.await;
-                todo!()
+                // todo!()
             })}
         </Suspense>
     }
