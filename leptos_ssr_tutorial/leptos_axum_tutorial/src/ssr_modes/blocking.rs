@@ -1,27 +1,57 @@
 use leptos::prelude::*;
 use leptos_meta::{Meta, Title};
 
+mod blog_elements;
+
 #[component]
 pub fn BlogPost() -> impl IntoView {
-    let post_data = Resource::new_blocking(/* load blog post */);
-    let comments_data = Resource::new(/* load blog comments */);
+    let (post_count, set_post_count) = signal(0);
+    let (comment_count, set_comment_count) = signal(0);
+    let post_data = Resource::new_blocking(
+        move || post_count.get(),
+        |_| blog_elements::blog_posts::get_posts()
+    );
+    let comments_data = Resource::new(
+        move || comment_count.get(),
+        |_| blog_elements::blog_posts::get_comments()
+    );
     view! {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
-                let data = post_data.await;
+                let data : Result<Vec<Post>, _> = post_data.await;
                 view! {
-                    <Title text=data.title/>
-                    <Meta name="description" content=data.excerpt/>
-                    <article>
-                        /* render the post content */
-                    </article>
+                    <ul>
+                        <For
+                            each = move || data.get().unwrap_or_default()
+                            key = |post| post.user.clone()
+                            let(d)
+                        >
+                            <Title text=d.user/>
+                            <Meta name="description" content=d.postData/>
+                            <li>
+                                <blog_elements::blog_posts::BlogPost post=d/>
+                            </li>
+                        </For>
+                    </ul>
                 }
             })}
         </Suspense>
         <Suspense fallback=|| "Loading comments...">
             {move || Suspend::new(async move {
-                let comments = comments_data.await;
-                // todo!()
+                let comments : Result<Vec<Comment>, _> = comments_data.await;
+                view! {
+                    <ul>
+                        <For
+                            each = move || comments.get().unwrap_or_default()
+                            key = |post| post.user.clone()
+                            let(c)
+                        >
+                            <li>
+                                <blog_elements::blog_posts::BlogPostComment post=c />
+                            </li>
+                        </For>
+                    </ul>
+                }
             })}
         </Suspense>
     }
