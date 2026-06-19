@@ -8,7 +8,9 @@ pub fn SynchronousRendering() -> impl IntoView  {
             blog_elements::blog_posts::get_comments().await
         }
     );
-    let comments_row = comments.into_iter().map(|p| {
+    let comments_row = comments.get().unwrap_or(
+        view!{<li>"Loading...."</li>}
+    ).into_iter().map(|p| {
         view!{
             <li>
                 <blog_elements::blog_posts::BlogPostComment(p) />
@@ -22,7 +24,9 @@ pub fn SynchronousRendering() -> impl IntoView  {
         }
     );
 
-    let posts_row = posts.into_iter().map(|p| {
+    let posts_row = posts.get().unwrap_or(
+        view!{<li>"Loading...."</li>}
+    ).into_iter().map(|p| {
         view!{
             <li>
                 <blog_elements::blog_posts::BlogPost(p) />

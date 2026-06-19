@@ -159,3 +159,16 @@ view!{
             </Suspense>
         </div>
     }
+
+Ok, the LocalResource -> into_iter -> collect_view thing is not working and needs...
+    an intermediary element?
+    of do I match that shit...
+        like this: (ish)
+    if let Matching: Explicitly check for data presence in reactive closures.
+    view! {
+        {move || if let Some(data) = resource.get() {
+            view! { <p>{data.value}</p> }
+        } else {
+            view! { <p>"Pending..."</p> }
+        }}
+    }
