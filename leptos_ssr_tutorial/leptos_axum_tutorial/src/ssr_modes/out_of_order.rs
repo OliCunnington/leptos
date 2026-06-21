@@ -7,13 +7,13 @@ pub fn OutOfOrderStreaming() -> impl IntoView {
             <h2>"Posts"</h2>
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
-                    {posts_row}
+                    // {posts_row}
                 </ul>
             </Suspense>
             <h2>"Comments"</h2>
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
-                    {comments_row}
+                    // {comments_row}
                 </ul>
             </Suspense>
         </div>

@@ -172,3 +172,6 @@ Ok, the LocalResource -> into_iter -> collect_view thing is not working and need
             view! { <p>"Pending..."</p> }
         }}
     }
+
+just make all the pages load...
+then worry about the fucking render modes or what ever they are...
