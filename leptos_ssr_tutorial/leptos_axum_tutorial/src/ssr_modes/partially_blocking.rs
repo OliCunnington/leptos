@@ -10,3 +10,30 @@
 //         ssr=SsrMode::PartiallyBlocked
 //     />
 // </Routes>
+
+use leptos::prelude::*;
+
+#[component]
+pub fn PartiallyBlocking() -> impl IntoView {
+    view!{
+        <div>
+            // metadata and title... ??
+            <h2>"Posts"</h2>
+            <Suspense fallback=|| view!{<p>"Loading..."</p>}>
+                <ul>
+                    <li>
+                        <p>"Placeholder"</p>
+                    </li>
+                </ul>
+            </Suspense>
+            <h2>"Comments"</h2>
+            <Suspense fallback=|| view!{<p>"Loading..."</p>}>
+                <ul>
+                    <li>
+                        <p>"Placeholder"</p>
+                    </li>
+                </ul>
+            </Suspense>
+        </div>
+    }
+}

@@ -7,13 +7,17 @@ pub fn InOrderStreaming() -> impl IntoView {
             <h2>"Posts"</h2>
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
-                    // {posts_row}
+                    <li>
+                        <p>"Placeholder"</p>
+                    </li>
                 </ul>
             </Suspense>
             <h2>"Comments"</h2>
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
-                    // {comments_row}
+                    <li>
+                        <p>"Placeholder"</p>
+                    </li>
                 </ul>
             </Suspense>
         </div>
