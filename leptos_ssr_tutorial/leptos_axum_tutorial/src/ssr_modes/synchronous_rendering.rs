@@ -1,12 +1,15 @@
 use leptos::prelude::*;
 
+mod blog_elements;
+
 #[component]
 pub fn SynchronousRendering() -> impl IntoView  {
 
     let comments = LocalResource::new(
-        async move {
-            blog_elements::blog_posts::get_comments().await
-        }
+        // async move {
+        //     blog_elements::blog_posts::get_comments().await
+        // }
+        move || blog_elements::blog_posts::get_comments()
     );
     // let comments_row = comments.get().unwrap_or(
     //     view!{<li>"Loading...."</li>}
@@ -19,9 +22,10 @@ pub fn SynchronousRendering() -> impl IntoView  {
     // }).collect_view();
 
     let posts = LocalResource::new(
-        async move {
-            blog_elements::blog_posts::get_posts().await
-        }
+        // async move {
+        //     blog_elements::blog_posts::get_posts().await
+        // }
+        move || blog_elements::blog_posts::get_posts()
     );
 
     // let posts_row = posts.get().unwrap_or(

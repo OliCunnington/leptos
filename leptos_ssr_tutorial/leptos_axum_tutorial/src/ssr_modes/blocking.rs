@@ -18,8 +18,8 @@ pub fn BlogPost() -> impl IntoView {
     view! {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
-                let data : Result<Vec<Post>, _> = post_data.await;
-                view! {
+                let data : Result<Vec<blog_elements::blog_posts::Post>, _> = post_data.await;
+                view!{
                     <ul>
                         <For
                             each = move || data.get().unwrap_or_default()
@@ -38,7 +38,7 @@ pub fn BlogPost() -> impl IntoView {
         </Suspense>
         <Suspense fallback=|| "Loading comments...">
             {move || Suspend::new(async move {
-                let comments : Result<Vec<Comment>, _> = comments_data.await;
+                let comments : Result<Vec<blog_elements::blog_posts::Comment>, _> = comments_data.await;
                 view! {
                     <ul>
                         <For
