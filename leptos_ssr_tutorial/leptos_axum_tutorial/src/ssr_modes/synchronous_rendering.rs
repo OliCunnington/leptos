@@ -66,7 +66,7 @@ pub fn SynchronousRendering() -> impl IntoView  {
                     let(child)
                     >
                         <li>
-                            <blog_elements::blog_posts::BlogPost(child) />
+                            <blog_elements::blog_posts::BlogPost post=child />
                         </li>
                     </For>
                 </ul>
@@ -80,7 +80,7 @@ pub fn SynchronousRendering() -> impl IntoView  {
                     let(child)
                     >
                         <li>
-                            <blog_elements::blog_posts::BlogPostComment(child) />
+                            <blog_elements::blog_posts::BlogPostComment comment=child />
                         </li>
                     </For>
                 </ul>
