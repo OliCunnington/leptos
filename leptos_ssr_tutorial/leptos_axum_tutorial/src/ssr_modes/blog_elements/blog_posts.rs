@@ -1,7 +1,8 @@
 use leptos::prelude::*;
 use gloo_timers::future::TimeoutFuture;
 use std::sync::{LazyLock, Mutex};
-
+use serde::{Deserialize, Serialize};
+// use serde_json;
 // pub struct Post {
 //     post: PostContent,
 //     comments: Vec<Comment>
@@ -14,13 +15,13 @@ pub async fn wait_for(i: i32) -> () {
     ()
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct PostContent {
     user: String,
     postData: String
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Comment {
     user: String,
     comment: String
@@ -57,15 +58,15 @@ static BLOGPOSTS : LazyLock<Mutex<Vec<PostContent>>> = LazyLock::new(|| Mutex::n
     v.push(PostContent{
         user: "A".to_string(),
         post_data: "Post 1".to_string()
-    })
+    });
     v.push(PostContent{
         user: "B".to_string(),
         post_data: "Post 2".to_string()
-    })
+    });
     v.push(PostContent{
         user: "C".to_string(),
         post_data: "Post 3".to_string()
-    })
+    });
     v
 }));
 
@@ -74,15 +75,15 @@ static COMMENTS : LazyLock<Mutex<Vec<Comment>>> = LazyLock::new(|| Mutex::new({
     v.push(Comment{
         user: "A".to_string(),
         comment: "Comment 1".to_string()
-    })
+    });
     v.push(Comment{
         user: "B".to_string(),
         comment: "Comment 2".to_string()
-    })
+    });
     v.push(Comment{
         user: "C".to_string(),
         comment: "Comment 3".to_string()
-    })
+    });
     v
 }));
 
