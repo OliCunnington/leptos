@@ -1,6 +1,6 @@
 use leptos::prelude::*;
 
-mod blog_elements;
+use crate::ssr_modes::blog_elements;
 
 #[component]
 pub fn SynchronousRendering() -> impl IntoView  {

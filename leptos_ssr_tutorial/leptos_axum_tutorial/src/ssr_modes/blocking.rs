@@ -1,7 +1,8 @@
 use leptos::prelude::*;
 use leptos_meta::{Meta, Title};
 
-mod blog_elements;
+
+use crate::ssr_modes::blog_elements;
 
 #[component]
 pub fn BlogPost() -> impl IntoView {
@@ -47,7 +48,7 @@ pub fn BlogPost() -> impl IntoView {
                             let(c)
                         >
                             <li>
-                                <blog_elements::blog_posts::BlogPostComment post=c />
+                                <blog_elements::blog_posts::BlogPostComment comment=c />
                             </li>
                         </For>
                     </ul>

@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 
 
 // wait for rand... ?
-pub async fn wait_for(i: i32) -> () {
+pub async fn wait_for(i: u32) -> () {
     TimeoutFuture::new(i).await;
     ()
 }
@@ -57,15 +57,15 @@ static BLOGPOSTS : LazyLock<Mutex<Vec<PostContent>>> = LazyLock::new(|| Mutex::n
     let mut v = Vec::new();
     v.push(PostContent{
         user: "A".to_string(),
-        post_data: "Post 1".to_string()
+        postData: "Post 1".to_string()
     });
     v.push(PostContent{
         user: "B".to_string(),
-        post_data: "Post 2".to_string()
+        postData: "Post 2".to_string()
     });
     v.push(PostContent{
         user: "C".to_string(),
-        post_data: "Post 3".to_string()
+        postData: "Post 3".to_string()
     });
     v
 }));
@@ -94,16 +94,16 @@ pub async fn get_posts() -> Result<Vec<PostContent>, ServerFnError> {
     Ok(BLOGPOSTS.lock().unwrap().clone())
 }
 
-pub async fn get_post(index: i32) -> Result<PostContent, ServerFnError> {
+pub async fn get_post(index: usize) -> Result<PostContent, ServerFnError> {
     // add random/optional delay?
-    Ok(BLOGPOSTS.lock().unwrap().clone()[index])
+    Ok(BLOGPOSTS.lock().unwrap()[index].clone())
 }
 
 pub async fn get_comments() -> Result<Vec<Comment>, ServerFnError> {
     Ok(COMMENTS.lock().unwrap().clone())
 }
 
-pub async fn get_comment(index: i32) -> Result<Comment, ServerFnError> {
+pub async fn get_comment(index: usize) -> Result<Comment, ServerFnError> {
     // add random/optional delay?
-    Ok(COMMENTS.lock().unwrap().clone()[index])
+    Ok(COMMENTS.lock().unwrap()[index].clone())
 }
