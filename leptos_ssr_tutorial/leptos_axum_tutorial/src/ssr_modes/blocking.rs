@@ -19,7 +19,7 @@ pub fn BlogPost() -> impl IntoView {
     view! {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
-                let data : Result<Vec<blog_elements::blog_posts::Post>, _> = post_data.await;
+                let data : Result<Vec<blog_elements::blog_posts::PostContent>, _> = post_data.await;
                 view!{
                     <ul>
                         <For
