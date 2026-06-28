@@ -61,7 +61,7 @@ pub fn SynchronousRendering() -> impl IntoView  {
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
                     <For
-                    each = move || posts.get().unwrap_or_default()
+                    each = move || posts.expect("Posts to be loaded").get().unwrap_or_default()
                     key = |post| post.user.clone()
                     let(child)
                     >
@@ -75,7 +75,7 @@ pub fn SynchronousRendering() -> impl IntoView  {
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
                     <For
-                    each = move || comments.get().unwrap_or_default()
+                    each = move || comments.expect("Comments to be loaded").get().unwrap_or_default()
                     key = |comment| comment.user.clone()
                     let(child)
                     >
