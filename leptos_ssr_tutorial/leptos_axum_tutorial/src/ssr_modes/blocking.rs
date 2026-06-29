@@ -23,14 +23,14 @@ pub fn BlogPost() -> impl IntoView {
                 view!{
                     <ul>
                         <For
-                            each = move || data.get().unwrap_or_default()
+                            each = move || data.as_ref().expect("Posts to be loaded") //.unwrap_or("Loading...")
                             key = |post| post.user.clone()
                             let(d)
                         >
                             <Title text=d.user/>
                             <Meta name="description" content=d.postData/>
                             <li>
-                                <blog_elements::blog_posts::BlogPost post=d/>
+                                <blog_elements::blog_posts::BlogPost post=d.clone()/>
                             </li>
                         </For>
                     </ul>
@@ -43,12 +43,12 @@ pub fn BlogPost() -> impl IntoView {
                 view! {
                     <ul>
                         <For
-                            each = move || comments.get().unwrap_or_default()
+                            each = move || comments.as_ref().expect("Comments to be loaded") //.unwrap_or("Loading...")
                             key = |post| post.user.clone()
                             let(c)
                         >
                             <li>
-                                <blog_elements::blog_posts::BlogPostComment comment=c />
+                                <blog_elements::blog_posts::BlogPostComment comment=c.clone() />
                             </li>
                         </For>
                     </ul>

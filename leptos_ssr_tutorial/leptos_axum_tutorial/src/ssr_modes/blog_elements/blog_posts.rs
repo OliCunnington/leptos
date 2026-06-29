@@ -17,14 +17,14 @@ pub async fn wait_for(i: u32) -> () {
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct PostContent {
-    user: String,
-    postData: String
+    pub user: String,
+    pub postData: String
 }
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct Comment {
-    user: String,
-    comment: String
+    pub user: String,
+    pub comment: String
 }
 
 #[component]
