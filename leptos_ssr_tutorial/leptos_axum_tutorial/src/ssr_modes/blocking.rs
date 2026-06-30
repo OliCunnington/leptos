@@ -27,10 +27,10 @@ pub fn BlogPost() -> impl IntoView {
                             key = |post| post.user.clone()
                             let(d)
                         >
-                            <Title text=d.user/>
-                            <Meta name="description" content=d.postData/>
+                            <Title text=d.user.clone() />
+                            <Meta name="description" content=d.postData.clone() />
                             <li>
-                                <blog_elements::blog_posts::BlogPost post=d.clone()/>
+                                <blog_elements::blog_posts::BlogPost post=d.clone() />
                             </li>
                         </For>
                     </ul>
