@@ -6,16 +6,18 @@ use crate::ssr_modes::blog_elements;
 
 #[component]
 pub fn BlogPost() -> impl IntoView {
-    let (post_count, set_post_count) = signal(0);
-    let (comment_count, set_comment_count) = signal(0);
+
     let post_data = Resource::new_blocking(
-        move || post_count.get(),
+        || (),
         |_| blog_elements::blog_posts::get_posts()
     );
+
     let comments_data = Resource::new(
-        move || comment_count.get(),
+        || (),
         |_| blog_elements::blog_posts::get_comments()
     );
+
+    
     view! {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
@@ -23,12 +25,12 @@ pub fn BlogPost() -> impl IntoView {
                 view!{
                     <ul>
                         <For
-                            each = move || data.as_ref().expect("Posts to be loaded") //.unwrap_or("Loading...")
+                            each = move || data.clone().expect("Posts to be loaded") //.unwrap_or("Loading...")
                             key = |post| post.user.clone()
                             let(d)
                         >
                             <Title text=d.user.clone() />
-                            <Meta name="description" content=d.postData.clone() />
+                            <Meta name="description" content=d.post_data.clone() />
                             <li>
                                 <blog_elements::blog_posts::BlogPost post=d.clone() />
                             </li>
@@ -43,7 +45,7 @@ pub fn BlogPost() -> impl IntoView {
                 view! {
                     <ul>
                         <For
-                            each = move || comments.as_ref().expect("Comments to be loaded") //.unwrap_or("Loading...")
+                            each = move || comments.clone().expect("Comments to be loaded") //.unwrap_or("Loading...")
                             key = |post| post.user.clone()
                             let(c)
                         >

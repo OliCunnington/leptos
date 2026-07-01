@@ -18,7 +18,7 @@ pub async fn wait_for(i: u32) -> () {
 #[derive(Deserialize, Serialize, Clone)]
 pub struct PostContent {
     pub user: String,
-    pub postData: String
+    pub post_data: String
 }
 
 #[derive(Deserialize, Serialize, Clone)]
@@ -32,7 +32,7 @@ pub fn BlogPost(post : PostContent) -> impl IntoView {
     view!{
         <div class="post">
             <p>{post.user}</p>
-            <p>{post.postData}</p>
+            <p>{post.post_data}</p>
         </div>
     }
 }
@@ -57,15 +57,15 @@ static BLOGPOSTS : LazyLock<Mutex<Vec<PostContent>>> = LazyLock::new(|| Mutex::n
     let mut v = Vec::new();
     v.push(PostContent{
         user: "A".to_string(),
-        postData: "Post 1".to_string()
+        post_data: "Post 1".to_string()
     });
     v.push(PostContent{
         user: "B".to_string(),
-        postData: "Post 2".to_string()
+        post_data: "Post 2".to_string()
     });
     v.push(PostContent{
         user: "C".to_string(),
-        postData: "Post 3".to_string()
+        post_data: "Post 3".to_string()
     });
     v
 }));
