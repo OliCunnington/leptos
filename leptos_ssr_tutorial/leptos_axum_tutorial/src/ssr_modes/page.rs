@@ -1,13 +1,13 @@
-use leptos::prelude::*
+use leptos::prelude::*;
 
 #[component]
 pub fn SSRModes() -> impl IntoView {
     view!{
-        <a href="">"Async Rendering"</a>
-        <a href="">"Blocking"</a>
-        <a href="">"In Order"</a>
-        <a href="">"Out of Order"</a>
-        <a href="">"Partially Blocking"</a>
-        <a href="">"Synchronous Rendering"</a>
+        <a href="/async">"Async Rendering"</a>
+        <a href="/blocking">"Blocking"</a>
+        <a href="/inorder">"In Order"</a>
+        <a href="/outoforder">"Out of Order"</a>
+        <a href="/partial">"Partially Blocking"</a>
+        <a href="/synchronous">"Synchronous Rendering"</a>
     }
 }

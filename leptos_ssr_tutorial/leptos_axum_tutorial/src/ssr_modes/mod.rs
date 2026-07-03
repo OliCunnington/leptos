@@ -5,3 +5,4 @@ pub mod out_of_order;
 pub mod partially_blocking;
 pub mod synchronous_rendering;
 pub mod blog_elements;
+pub mod page;

@@ -5,6 +5,7 @@ use leptos_router::{
     StaticSegment,
     path
 };
+use crate::ssr_modes;
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -57,7 +58,7 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/extractors") view=HomePage/>
                     <Route path=path!("/hydration_bugs") view=HomePage/>
                     <Route path=path!("/progressive_enhancment") view=HomePage/>
-                    <Route path=path!("/ssr_modes") view=SSRModes/>
+                    <Route path=path!("/ssr_modes") view=ssr_modes::page::SSRModes/>
                     <Route path=path!("/server_functions") view=HomePage/>
                 </Routes>
             </main>
