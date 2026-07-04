@@ -58,8 +58,17 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/extractors") view=HomePage/>
                     <Route path=path!("/hydration_bugs") view=HomePage/>
                     <Route path=path!("/progressive_enhancment") view=HomePage/>
-                    <Route path=path!("/ssr_modes") view=ssr_modes::page::SSRModes/>
+                    <ParentRoute path=path!("/ssr_modes") view=ssr_modes::page::SSRModes>
+                        <Route path=path!("/async") view=ssr_modes::async_rendering::AsynchronousRendering/>
+                        <Route path=path!("/blocking") view=ssr_modes::blocking::Blocking />
+                        <Route path=path!("/inorder") view=ssr_modes::in_order::InOrderStreaming />
+                        <Route path=path!("/outoforder") view=ssr_modes::out_of_order::OutOfOrderStreaming />
+                        <Route path=path!("/partial") view=ssr_modes::partially_blocking::PartiallyBlocking />
+                        <Route path=path!("/synchronous") view=ssr_modes::synchronous_rendering::SynchronousRendering />
+                        <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
+                    </ParentRoute>
                     <Route path=path!("/server_functions") view=HomePage/>
+                    <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
         </Router>

@@ -5,7 +5,7 @@ use leptos_meta::{Meta, Title};
 use crate::ssr_modes::blog_elements;
 
 #[component]
-pub fn BlogPost() -> impl IntoView {
+pub fn Blocking() -> impl IntoView {
 
     let post_data = Resource::new_blocking(
         || (),
