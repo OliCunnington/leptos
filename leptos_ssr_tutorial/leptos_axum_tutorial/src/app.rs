@@ -3,6 +3,7 @@ use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
     components::{Route, Router, Routes},
     StaticSegment,
+    SsrMode,
     path
 };
 use crate::ssr_modes;
@@ -59,16 +60,41 @@ pub fn App() -> impl IntoView {
                     <Route path=path!("/hydration_bugs") view=HomePage/>
                     <Route path=path!("/progressive_enhancment") view=HomePage/>
                     <ParentRoute path=path!("/ssr_modes") view=ssr_modes::page::SSRModes>
-                        <Route path=path!("/async") view=ssr_modes::async_rendering::AsynchronousRendering/>
-                        <Route path=path!("/blocking") view=ssr_modes::blocking::Blocking />
-                        <Route path=path!("/inorder") view=ssr_modes::in_order::InOrderStreaming />
-                        <Route path=path!("/outoforder") view=ssr_modes::out_of_order::OutOfOrderStreaming />
-                        <Route path=path!("/partial") view=ssr_modes::partially_blocking::PartiallyBlocking />
-                        <Route path=path!("/synchronous") view=ssr_modes::synchronous_rendering::SynchronousRendering />
-                        <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
+                        <Route 
+                            path=path!("/async") 
+                            view=ssr_modes::async_rendering::AsynchronousRendering
+                            ssr=SsrMode::Async
+                        />
+                        <Route 
+                            path=path!("/blocking") 
+                            view=ssr_modes::blocking::Blocking
+                            ssr=SsrMode::PartiallyBlocked 
+                        />
+                        <Route
+                            path=path!("/inorder") 
+                            view=ssr_modes::in_order::InOrderStreaming 
+                            ssr=SsrMode::InOrder
+                        />
+                        <Route 
+                            path=path!("/outoforder") 
+                            view=ssr_modes::out_of_order::OutOfOrderStreaming 
+                        />
+                        <Route 
+                            path=path!("/partial") 
+                            view=ssr_modes::partially_blocking::PartiallyBlocking 
+                            ssr=SsrMode::PartiallyBlocked 
+                        />
+                        <Route 
+                            path=path!("/synchronous") 
+                            view=ssr_modes::synchronous_rendering::SynchronousRendering 
+                        />
+                        // <Route 
+                        //     path=path!("/*any") 
+                        //     view=|| view! { <h1>"Not Found"</h1> }
+                        // />
                     </ParentRoute>
                     <Route path=path!("/server_functions") view=HomePage/>
-                    <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
+                    // <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
         </Router>
