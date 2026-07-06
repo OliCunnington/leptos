@@ -1,7 +1,7 @@
 use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, MetaTags, Stylesheet, Title};
 use leptos_router::{
-    components::{Route, Router, Routes},
+    components::{Route, Router, Routes, ParentRoute},
     StaticSegment,
     SsrMode,
     path
@@ -88,10 +88,10 @@ pub fn App() -> impl IntoView {
                             path=path!("/synchronous") 
                             view=ssr_modes::synchronous_rendering::SynchronousRendering 
                         />
-                        // <Route 
-                        //     path=path!("/*any") 
-                        //     view=|| view! { <h1>"Not Found"</h1> }
-                        // />
+                        <Route 
+                            path=path!("/*any") 
+                            view=|| view! { <h1>"Not Found"</h1> }
+                        />
                     </ParentRoute>
                     <Route path=path!("/server_functions") view=HomePage/>
                     // <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
