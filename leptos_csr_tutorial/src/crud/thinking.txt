@@ -175,3 +175,7 @@ Ok, the LocalResource -> into_iter -> collect_view thing is not working and need
 
 just make all the pages load...
 then worry about the fucking render modes or what ever they are...
+
+
+---
+Ok, so when I await a Timeout, the "future returned is not send"
