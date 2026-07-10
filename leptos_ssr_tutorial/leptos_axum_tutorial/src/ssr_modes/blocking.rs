@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use leptos_meta::{Meta, Title};
+use gloo_timers::future::TimeoutFuture;
 
 
 use crate::ssr_modes::blog_elements;
@@ -9,7 +10,10 @@ pub fn Blocking() -> impl IntoView {
 
     let post_data = Resource::new_blocking(
         || (),
+        // async |_| {
+            // TimeoutFuture::new(2_000).await;
         |_| blog_elements::blog_posts::get_posts()
+        //}
     );
 
     let comments_data = Resource::new(
