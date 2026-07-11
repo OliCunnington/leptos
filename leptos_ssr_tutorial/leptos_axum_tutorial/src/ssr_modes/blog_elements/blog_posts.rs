@@ -96,7 +96,9 @@ pub async fn get_posts() -> Result<Vec<PostContent>, ServerFnError> {
     // let mut rng = rand::rng();
     // let w : u32 = rng.random_range(1..4);
     // wait_for(w).await;
-    // TimeoutFuture::new(2_000).await;
+    // {
+    //     TimeoutFuture::new(2_000).await;
+    // }
     Ok(BLOGPOSTS.lock().unwrap().clone())
 }
 
