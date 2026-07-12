@@ -184,3 +184,7 @@ Ok, so when I await a Timeout, the "future returned is not send"
 Resource<Future = ,,, >>>> is not future?!
 
 breaking on the timeout... what the flip am I doing wrong here...
+
+await timeouts to simulate latency, and demonstrate the ssr versions...
+
+cannot timeout !!??
