@@ -7,10 +7,16 @@ pub fn AsynchronousRendering() -> impl IntoView  {
     let (count, set_count) = signal(0);
 
     // our resource
-    let async_data = Resource::new(
+    let posts = Resource::new(
         move || count.get(),
         // every time `count` changes, this will run
-        |count| load_data(count) 
+        |count| load_posts(count as usize) 
+    );
+
+    let comments = Resource::new(
+        move || count.get(),
+        // every time `count` changes, this will run
+        |count| load_comments(count) 
     );
 
     view!{
@@ -29,23 +35,51 @@ pub fn AsynchronousRendering() -> impl IntoView  {
             <h2>"Posts"</h2>
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
-                    <li>
-                        <p>"Placeholder"</p>
-                    </li>
+                    <For
+                    each = move || posts.get().expect("Posts to be loaded").unwrap_or_default()
+                    key = |post| post.user.clone()
+                    let(child)
+                    >
+                        <li>
+                            <blog_posts::BlogPost post=child />
+                        </li>
+                    </For>
                 </ul>
             </Suspense>
             <h2>"Comments"</h2>
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
-                    <li>
-                        <p>"Placeholder"</p>
-                    </li>
+                    <For
+                    each = move || comments.get().expect("Comments to be loaded").unwrap_or_default()
+                    key = |comment| comment.user.clone()
+                    let(child)
+                    >
+                        <li>
+                            <blog_posts::BlogPostComment comment=child />
+                        </li>
+                    </For>
                 </ul>
             </Suspense>
         </div>
     }
 }
 
-async fn load_data(index: i32) -> Result<Vec<blog_posts::PostContent>, ServerFnError> {
-    blog_posts::get_posts().await
+async fn load_posts(index: usize) -> Result<Vec<blog_posts::PostContent>, ServerFnError> {
+    match index {
+        0 => blog_posts::get_posts().await,
+        _ => {
+            let r = blog_posts::get_post(index).await;
+            Ok(vec![r.unwrap()])
+        }
+    }
+}
+
+async fn load_comments(index: usize) -> Result<Vec<blog_posts::Comment>, ServerFnError> {
+    match index {
+        0 => blog_posts::get_comments().await,
+        _ => {
+            let r = blog_posts::get_comment(index).await;
+            Ok(vec![r.unwrap()])
+        }
+    }
 }

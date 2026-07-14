@@ -190,3 +190,10 @@ await timeouts to simulate latency, and demonstrate the ssr versions...
 cannot timeout !!??
 
 fuckit... replace placeholders and ensure its functional without... figure out wait/latency demo later
+
+broken async_rendering?!
+    why does this one not want to do the load???
+    its a string? no... an int... type needed? eh?!
+    as worked
+
+    but async_rendering still breaky
