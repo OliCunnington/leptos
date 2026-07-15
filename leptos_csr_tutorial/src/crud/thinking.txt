@@ -197,3 +197,5 @@ broken async_rendering?!
     as worked
 
     but async_rendering still breaky
+
+    tokio timeout seems to have broken synchronized rendering too....

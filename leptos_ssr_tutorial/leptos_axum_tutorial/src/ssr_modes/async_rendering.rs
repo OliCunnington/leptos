@@ -16,7 +16,7 @@ pub fn AsynchronousRendering() -> impl IntoView  {
     let comments = Resource::new(
         move || count.get(),
         // every time `count` changes, this will run
-        |count| load_comments(count) 
+        |count| load_comments(count as usize) 
     );
 
     view!{

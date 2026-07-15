@@ -1,5 +1,4 @@
 use leptos::prelude::*;
-use gloo_timers::future::TimeoutFuture;
 use std::sync::{LazyLock, Mutex};
 use serde::{Deserialize, Serialize};
 // use rand::RngExt;
@@ -9,14 +8,6 @@ use serde::{Deserialize, Serialize};
 //     comments: Vec<Comment>
 // }
 
-
-// wait for rand... ?
-// do i just like... not do this? call the fucking timeout in the func?
-// warum!
-pub async fn wait_for(i: u32) -> () {
-    TimeoutFuture::new(i).await;
-    ()
-}
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct PostContent {
@@ -99,6 +90,7 @@ pub async fn get_posts() -> Result<Vec<PostContent>, ServerFnError> {
     // {
     //     TimeoutFuture::new(2_000).await;
     // }
+    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
     Ok(BLOGPOSTS.lock().unwrap().clone())
 }
 
