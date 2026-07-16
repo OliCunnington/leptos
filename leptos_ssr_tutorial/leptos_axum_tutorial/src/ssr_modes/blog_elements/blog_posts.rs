@@ -90,7 +90,7 @@ pub async fn get_posts() -> Result<Vec<PostContent>, ServerFnError> {
     // {
     //     TimeoutFuture::new(2_000).await;
     // }
-    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+    // tokio::time::sleep(std::time::Duration::from_secs(1)).await;
     Ok(BLOGPOSTS.lock().unwrap().clone())
 }
 
