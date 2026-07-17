@@ -61,7 +61,7 @@ pub fn SynchronousRendering() -> impl IntoView  {
             <Suspense fallback=|| view!{<p>"Loading..."</p>}>
                 <ul>
                     <For
-                    each = move || posts.get().expect("Posts to be loaded").unwrap_or_default()
+                    each = move || posts.get().expect("Posts to be loaded").unwrap_or_default() //.unwrap_or(vec![blog_elements::blog_posts::PostContent{user:"Not".to_string(), post_data:"Found".to_string()}])
                     key = |post| post.user.clone()
                     let(child)
                     >

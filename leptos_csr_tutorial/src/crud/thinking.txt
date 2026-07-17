@@ -203,4 +203,7 @@ broken async_rendering?!
 
     time pulled out of tokio in cargo.toml, glootimers out of blocking...
     still dead.
-    
+    direct load of /ssr_modes/sync... shows panic error and line, using unrwap_or(vec[data:hasjasd2]) didn't help... still panik
+
+    ok it was the #[server] tag 
+    yi-poo (more work later i guess, move on for now)

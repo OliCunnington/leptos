@@ -82,7 +82,7 @@ static COMMENTS : LazyLock<Mutex<Vec<Comment>>> = LazyLock::new(|| Mutex::new({
 }));
 
 // server fn? [something??]
-#[server]
+// #[server]
 pub async fn get_posts() -> Result<Vec<PostContent>, ServerFnError> {
     // let mut rng = rand::rng();
     // let w : u32 = rng.random_range(1..4);
@@ -100,7 +100,7 @@ pub async fn get_post(index: usize) -> Result<PostContent, ServerFnError> {
     Ok(BLOGPOSTS.lock().unwrap()[index].clone())
 }
 
-#[server]
+// #[server]
 pub async fn get_comments() -> Result<Vec<Comment>, ServerFnError> {
     Ok(COMMENTS.lock().unwrap().clone())
 }

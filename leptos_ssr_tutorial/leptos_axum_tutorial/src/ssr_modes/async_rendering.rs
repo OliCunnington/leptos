@@ -68,7 +68,7 @@ async fn load_posts(index: usize) -> Result<Vec<blog_posts::PostContent>, Server
     match index {
         0 => blog_posts::get_posts().await,
         _ => {
-            let r = blog_posts::get_post(index).await;
+            let r = blog_posts::get_post(index - 1).await;
             Ok(vec![r.unwrap()])
         }
     }
@@ -78,7 +78,7 @@ async fn load_comments(index: usize) -> Result<Vec<blog_posts::Comment>, ServerF
     match index {
         0 => blog_posts::get_comments().await,
         _ => {
-            let r = blog_posts::get_comment(index).await;
+            let r = blog_posts::get_comment(index - 1).await;
             Ok(vec![r.unwrap()])
         }
     }
