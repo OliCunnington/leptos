@@ -197,7 +197,7 @@ broken async_rendering?!
     as worked
 
     but async_rendering still breaky
-
+        - async works for loading spec post (-1 was needed though, duh)
     tokio timeout seems to have broken synchronized rendering too....
 
 
@@ -207,3 +207,12 @@ broken async_rendering?!
 
     ok it was the #[server] tag 
     yi-poo (more work later i guess, move on for now)
+
+ok.. like a version of the hydration bugs page?
+    or just leave for lateR?
+
+aah jaysus
+    alright, i guess the Todo yoke should be on surrealDB...
+        i should probably learn to set up a SQL too... sqlx?
+        oof... auth..
+        ok it's fine... all fine... just need to set up basic ish
