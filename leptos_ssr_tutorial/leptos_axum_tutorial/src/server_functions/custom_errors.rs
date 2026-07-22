@@ -24,3 +24,11 @@ pub async fn create_user(name: String, email: String) -> Result<User, AppError> 
         Err(e) => Err(AppError::DbError(e.to_string())),
     }
 }
+
+
+pub async fn insert_user_into_db(name: &String, email: &String) -> Result<User, AppError> {
+    Err(AppError(
+        ServerFnErrorErr::new(),
+        "Did not work"
+    ))
+}
