@@ -8,6 +8,13 @@ pub enum AppError {
     DbError(String),
 }
 
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct User {
+    name: String,
+    email: String
+}
+
 impl FromServerFnError for AppError {
     type Encoder = JsonEncoding;
 
@@ -27,8 +34,5 @@ pub async fn create_user(name: String, email: String) -> Result<User, AppError> 
 
 
 pub async fn insert_user_into_db(name: &String, email: &String) -> Result<User, AppError> {
-    Err(AppError(
-        ServerFnErrorErr::new(),
-        "Did not work"
-    ))
+    Err(AppError::DbError("Did not work".to_string()))
 }
