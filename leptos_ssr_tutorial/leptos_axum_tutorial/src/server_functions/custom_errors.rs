@@ -26,13 +26,14 @@ impl FromServerFnError for AppError {
 #[server]
 pub async fn create_user(name: String, email: String) -> Result<User, AppError> {
     // Try to create user in database
-    match insert_user_into_db(&name, &email).await {
+    match insert_user_into_db(name, email).await {
         Ok(user) => Ok(user),
         Err(e) => Err(AppError::DbError(e.to_string())),
     }
 }
 
 
-pub async fn insert_user_into_db(name: &String, email: &String) -> Result<User, AppError> {
+#[server]
+pub async fn insert_user_into_db(name: String, email: String) -> Result<User, AppError> {
     Err(AppError::DbError("Did not work".to_string()))
 }
