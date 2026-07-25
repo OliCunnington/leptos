@@ -39,6 +39,7 @@ pub mod ssr {
 pub async fn get_todos() -> Result<Vec<Todo>, ServerFnError> {
     use self::ssr::*;
     use http::request::Parts;
+    // use sqlx::*;
 
     // this is just an example of how to access server context injected in the handlers
     let req_parts = use_context::<Parts>();
@@ -69,6 +70,7 @@ pub async fn get_todos() -> Result<Vec<Todo>, ServerFnError> {
 #[server]
 pub async fn add_todo(title: String) -> Result<(), ServerFnError> {
     use self::ssr::*;
+    // use sqlx::*;
     let mut conn = db().await?;
 
     // fake API delay

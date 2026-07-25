@@ -7,6 +7,7 @@ use leptos_router::{
     path
 };
 use crate::ssr_modes;
+use crate::server_functions;
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -93,7 +94,20 @@ pub fn App() -> impl IntoView {
                             view=|| view! { <h1>"Not Found"</h1> }
                         />
                     </ParentRoute>
-                    <Route path=path!("/server_functions") view=HomePage/>
+                    <ParentRoute path=path!("/server_functions") view=server_functions::pages::ServerFunctions>
+                        <Route 
+                            path=path!("/custom_errors") 
+                            view=server_functions::custom_errors::CustomErrors
+                        />
+                        <Route 
+                            path=path!("/todos") 
+                            view=server_functions::todos::BusyButton
+                        />
+                        <Route 
+                            path=path!("/*any") 
+                            view=|| view! { <h1>"Not Found"</h1> }
+                        />
+                    </ParentRoute>
                     // <Route path=path!("/*any") view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
