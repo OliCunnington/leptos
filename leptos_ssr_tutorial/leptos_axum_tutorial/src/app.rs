@@ -8,6 +8,7 @@ use leptos_router::{
 };
 use crate::ssr_modes;
 use crate::server_functions;
+use crate::extractors;
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -57,7 +58,16 @@ pub fn App() -> impl IntoView {
                     <Route path=StaticSegment("") view=HomePage/>
                     <Route path=path!("/actionform") view=HomePage/>
                     <Route path=path!("/async_closures") view=HomePage/>
-                    <Route path=path!("/extractors") view=HomePage/>
+                    <ParentRoute path=path!("/extractors") view=extractors::pages::Extractors>
+                        <Route 
+                            path=path!("/extractors") 
+                            view=extractors::extractors::Extractors 
+                        />
+                        <Route 
+                            path=path!("/states") 
+                            view=extractors::states::States 
+                        />
+                    </ParentRoute>
                     <Route path=path!("/hydration_bugs") view=HomePage/>
                     <Route path=path!("/progressive_enhancment") view=HomePage/>
                     <ParentRoute path=path!("/ssr_modes") view=ssr_modes::page::SSRModes>
