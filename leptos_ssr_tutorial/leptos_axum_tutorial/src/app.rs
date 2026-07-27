@@ -58,7 +58,7 @@ pub fn App() -> impl IntoView {
                     <Route path=StaticSegment("") view=HomePage/>
                     <Route path=path!("/actionform") view=HomePage/>
                     <Route path=path!("/async_closures") view=HomePage/>
-                    <ParentRoute path=path!("/extractors") view=extractors::pages::Extractors>
+                    <ParentRoute path=path!("/extractors") view=extractors::pages::ExtractorNav>
                         <Route 
                             path=path!("/extractors") 
                             view=extractors::extractors::Extractors 

@@ -2,7 +2,7 @@ use leptos::prelude::*;
 use leptos_router::nested_router::Outlet;
 
 #[component]
-pub fn Extractors() -> impl IntoView {
+pub fn ExtractorNav() -> impl IntoView {
     view!{
         <main>
             <nav>

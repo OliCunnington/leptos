@@ -216,3 +216,8 @@ aah jaysus
         i should probably learn to set up a SQL too... sqlx?
         oof... auth..
         ok it's fine... all fine... just need to set up basic ish
+
+extra tractors
+    page not found
+        wow... but its there
+        why...
