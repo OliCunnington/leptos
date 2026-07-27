@@ -70,7 +70,7 @@ pub fn App() -> impl IntoView {
                     </ParentRoute>
                     <Route path=path!("/hydration_bugs") view=HomePage/>
                     <Route path=path!("/progressive_enhancment") view=HomePage/>
-                    <ParentRoute path=path!("/ssr_modes") view=ssr_modes::page::SSRModes>
+                    <ParentRoute path=path!("/ssr_modes") view=ssr_modes::pages::SSRModes>
                         <Route 
                             path=path!("/async") 
                             view=ssr_modes::async_rendering::AsynchronousRendering

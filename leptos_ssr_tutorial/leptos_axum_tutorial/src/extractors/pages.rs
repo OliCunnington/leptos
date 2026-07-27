@@ -1,6 +1,7 @@
 use leptos::prelude::*;
 use leptos_router::nested_router::Outlet;
 
+#[component]
 pub fn Extractors() -> impl IntoView {
     view!{
         <main>
