@@ -67,6 +67,10 @@ pub fn App() -> impl IntoView {
                             path=path!("/states") 
                             view=extractors::states::States 
                         />
+                        <Route 
+                            path=path!("/*any") 
+                            view=|| view! { <h1>"Not Found"</h1> }
+                        />
                     </ParentRoute>
                     <Route path=path!("/hydration_bugs") view=HomePage/>
                     <Route path=path!("/progressive_enhancment") view=HomePage/>
