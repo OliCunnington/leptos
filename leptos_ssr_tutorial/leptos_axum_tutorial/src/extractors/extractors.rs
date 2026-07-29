@@ -24,6 +24,7 @@ pub fn Extractors() -> impl IntoView {
     );
 
     view!{
+        <h2>"Extractor return:"</h2>
         <Suspense fallback=|| view!{<p>"Loading..."</p>}>
             <p>{ext}</p>
         </Suspense>

@@ -221,3 +221,10 @@ extra tractors
     page not found
         wow... but its there
         why...
+        im an idiot
+    empty result... ?
+
+oof
+    state stuff needs state built into routes?
+    isnt that like... a whole new app?
+        sub-app?
