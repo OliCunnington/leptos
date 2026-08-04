@@ -3,7 +3,7 @@ use leptos::prelude::*;
 
 #[server]
 pub async fn add_todo(title: String) -> Result<(), ServerFnError> {
-    todo!()
+    Ok(())
 }
 
 #[component]
@@ -44,7 +44,11 @@ fn ComplexInput() -> impl IntoView {
 
     view! {
       <ActionForm action=submit>
-        <input type="text" name="hefty_arg[first_name]" value="leptos"/>
+        <input 
+          type="text"
+          name="hefty_arg[first_name]"
+          value="leptos"
+        />
         <input
           type="text"
           name="hefty_arg[last_name]"
