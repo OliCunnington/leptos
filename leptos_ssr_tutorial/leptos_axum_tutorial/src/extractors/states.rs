@@ -1,4 +1,6 @@
 use leptos::prelude::*;
+use leptos_axum::extract_with_state;
+use axum::extract::FromRef;
 
 // Leptos provides its own method of dependency injection via context. 
 // Context can often be used instead of State to provide shared server data
@@ -23,9 +25,9 @@ pub struct MyData {
     pub leptos_options: LeptosOptions,
 }
 
-let app_state = MyData {
+static app_state : MyData = MyData {
     value: 42,
-    leptos_options,
+    leptos_options: LeptosOptions::builder().output_name("test").build(),
 };
 
 // build our application with a route
@@ -48,6 +50,7 @@ pub async fn uses_state() -> Result<(), ServerFnError> {
     let state = expect_context::<MyData>();
     let SomeStateExtractor(data) = extract_with_state(&state).await?;
     // todo
+    Ok(())
 }
 
 

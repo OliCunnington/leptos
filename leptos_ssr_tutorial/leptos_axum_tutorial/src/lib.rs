@@ -2,6 +2,8 @@ pub mod app;
 pub mod ssr_modes;
 pub mod server_functions;
 pub mod extractors;
+pub mod action_forms;
+pub mod async_reference;
 
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]

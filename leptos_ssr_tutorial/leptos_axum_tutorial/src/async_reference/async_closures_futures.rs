@@ -1,6 +1,6 @@
-use leptops::prelude::*;
+use leptos::prelude::*;
 
-[#component]
+#[component]
 pub fn AsyncClosuresAndFutures() -> impl IntoView {
     view!{
         <table>

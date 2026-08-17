@@ -10,6 +10,7 @@ use crate::ssr_modes;
 use crate::server_functions;
 use crate::extractors;
 use crate::async_reference;
+use crate::action_forms;
 
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     view! {
@@ -57,8 +58,8 @@ pub fn App() -> impl IntoView {
             <main>
                 <Routes fallback=|| "Page not found.".into_view()>
                     <Route path=StaticSegment("") view=HomePage/>
-                    <Route path=path!("/actionform") view=HomePage/>
-                    <Route path=path!("/async_closures") view=async_reference::async_closure_futures::AsyncClosuresAndFutures/>
+                    <Route path=path!("/actionform") view=action_forms::action_forms::AddTodo/>
+                    <Route path=path!("/async_closures") view=async_reference::async_closures_futures::AsyncClosuresAndFutures/>
                     <ParentRoute path=path!("/extractors") view=extractors::pages::ExtractorNav>
                         <Route 
                             path=path!("/extractors") 

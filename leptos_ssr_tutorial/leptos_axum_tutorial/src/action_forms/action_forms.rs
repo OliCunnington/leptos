@@ -7,7 +7,7 @@ pub async fn add_todo(title: String) -> Result<(), ServerFnError> {
 }
 
 #[component]
-fn AddTodo() -> impl IntoView {
+pub fn AddTodo() -> impl IntoView {
     let add_todo = ServerAction::<AddTodo>::new();
     // holds the latest *returned* value from the server
     let value = add_todo.value();
@@ -68,6 +68,6 @@ fn ComplexInput() -> impl IntoView {
 async fn very_important_fn(hefty_arg: HeftyData) -> Result<(), ServerFnError> {
     assert_eq!(hefty_arg.first_name.as_str(), "leptos");
     assert_eq!(hefty_arg.last_name.as_str(), "closures-everywhere");
-    aseert_eq!(hefty_arg.settings.display_name.as_str(), "my alias");
+    assert_eq!(hefty_arg.settings.display_name.as_str(), "my alias");
     Ok(())
 }
