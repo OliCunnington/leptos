@@ -1,6 +1,6 @@
 use leptos::prelude::*;
-use leptos_axum::extract_with_state;
-use axum::extract::FromRef;
+// use leptos_axum::extract_with_state;
+// use axum::extract::FromRef;
 
 // Leptos provides its own method of dependency injection via context. 
 // Context can often be used instead of State to provide shared server data
@@ -19,16 +19,18 @@ use axum::extract::FromRef;
 //     )
     // etc.
 
-#[derive(FromRef, Debug, Clone)]
-pub struct MyData {
-    pub value: usize,
-    pub leptos_options: LeptosOptions,
-}
+// #[derive(FromRef, Debug, Clone)]
+// pub struct MyData {
+//     pub value: usize,
+//     pub leptos_options: std::sync::LazyLock<LeptosOptions>,
+// }
 
-static app_state : MyData = MyData {
-    value: 42,
-    leptos_options: LeptosOptions::builder().output_name("test").build(),
-};
+// static app_state : MyData = MyData {
+//     value: 42,
+//     leptos_options: std::sync::LazyLock::new(
+//         || LeptosOptions::builder().output_name("test").build()
+//     )
+// };
 
 // build our application with a route
 // let app = Router::new()
@@ -44,14 +46,14 @@ static app_state : MyData = MyData {
 //     .fallback(file_and_error_handler)
 //     .with_state(app_state);
 
-// ...
-#[server]
-pub async fn uses_state() -> Result<(), ServerFnError> {
-    let state = expect_context::<MyData>();
-    let SomeStateExtractor(data) = extract_with_state(&state).await?;
-    // todo
-    Ok(())
-}
+//  ...
+// #[server]
+// pub async fn uses_state() -> Result<(), ServerFnError> {
+//     let state = expect_context::<MyData>();
+//     let SomeStateExtractor(data) = extract_with_state::<(), _>(&state).await?;
+//     // todo
+//     Ok(())
+// }
 
 
 #[component]
